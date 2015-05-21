@@ -1,11 +1,11 @@
 # Codemirror
 
-The excellent CodeMirror editor as a React.js component.
+The excellent [CodeMirror](https://codemirror.net) editor as a [React.js](http://facebook.github.io/react) component.
 
 
 ## Demo & Examples
 
-Live demo: [JedWatson.github.io/react-codemirror](http://JedWatson.github.io/react-codemirror/)
+Live demo: [JedWatson.github.io/react-codemirror](http://JedWatson.github.io/react-codemirror)
 
 To build the examples locally, run:
 
@@ -31,11 +31,29 @@ npm install codemirror --save
 ## Usage
 
 ```
-// TODO: value, onChange example
+var React = require('react'),
+	Codemirror = require('react-codemirror');
 
-var Codemirror = require('codemirror');
+var App = React.createClass({
+	getInitialState: function() {
+		return {
+			code: "// Code"
+		};
+	},
+	updateCode: function(newCode) {
+		this.setState({
+			code: newCode
+		});
+	},
+	render: function() {
+		var options = {
+			lineNumbers: true
+		};
+		return <Codemirror value={this.state.code} onChange={this.updateCode} options={options} />
+	}
+});
 
-<Codemirror />
+React.render(<App />, document.getElementById('app'));
 ```
 
 ### Properties
@@ -43,6 +61,8 @@ var Codemirror = require('codemirror');
 * `value` `String` the editor value
 * `options` `Object (newValue)` options passed to the CodeMirror instance
 * `onChange` `Function (newValue)` called when a change is made
+
+See the [CodeMirror API Docs](https://codemirror.net/doc/manual.html#api) for the available options.
 
 ### License
 
