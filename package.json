@@ -1,6 +1,6 @@
 {
   "name": "react-codemirror",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Codemirror",
   "main": "src/Codemirror.js",
   "author": "Jed Watson",
@@ -37,6 +37,8 @@
   "keywords": [
     "react",
     "react-component",
-    "codemirror"
+    "codemirror",
+    "editor",
+    "code"
   ]
 }

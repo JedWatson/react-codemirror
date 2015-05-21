@@ -1,6 +1,6 @@
 {
   "name": "react-codemirror",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "React Codemirror",
   "main": "dist/codemirror.min.js",
   "homepage": "https://github.com/JedWatson/react-codemirror",
@@ -15,7 +15,9 @@
   "keywords": [
     "react",
     "react-component",
-    "codemirror"
+    "codemirror",
+    "editor",
+    "code"
   ],
   "license": "MIT",
   "ignore": [
