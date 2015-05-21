@@ -16,11 +16,7 @@ var App = React.createClass({
 		var options = {
 			lineNumbers: true
 		};
-		return (
-			<div>
-				<Codemirror value={this.state.code} onChange={this.updateCode} options={options} />
-			</div>
-		);
+		return <Codemirror value={this.state.code} onChange={this.updateCode} options={options} />
 	}
 });
 
