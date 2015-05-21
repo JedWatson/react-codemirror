@@ -1,6 +1,6 @@
 # Codemirror
 
-__COMPONENT DESCRIPTION GOES HERE__
+The excellent CodeMirror editor as a React.js component.
 
 
 ## Demo & Examples
@@ -11,7 +11,7 @@ To build the examples locally, run:
 
 ```
 npm install
-gulp dev
+npm start
 ```
 
 Then open [`localhost:8000`](http://localhost:8000) in a browser.
@@ -30,25 +30,21 @@ npm install codemirror --save
 
 ## Usage
 
-__EXPLAIN USAGE HERE__
-
 ```
+// TODO: value, onChange example
+
 var Codemirror = require('codemirror');
 
-<Codemirror>Example</Codemirror>
+<Codemirror />
 ```
 
 ### Properties
 
-* __DOCUMENT PROPERTIES HERE__
-
-### Notes
-
-__ADDITIONAL USAGE NOTES__
+* `value` `String` the editor value
+* `options` `Object (newValue)` options passed to the CodeMirror instance
+* `onChange` `Function (newValue)` called when a change is made
 
 ### License
 
-__PUT LICENSE HERE__
-
-Copyright (c) 2015 Jed Watson.
+MIT. Copyright (c) 2015 Jed Watson.
 
