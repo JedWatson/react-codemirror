@@ -2,7 +2,7 @@
   "name": "react-codemirror",
   "version": "0.1.0",
   "description": "Codemirror",
-  "main": "src/Codemirror.js",
+  "main": "lib/Codemirror.js",
   "author": "Jed Watson",
   "homepage": "https://github.com/JedWatson/react-codemirror",
   "repository": {
