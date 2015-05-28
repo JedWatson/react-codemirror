@@ -59,7 +59,7 @@ var CodeMirror = React.createClass({
 		}
 		return (
 			<div className={className}>
-				<textarea ref="codemirror" name={this.props.path} value={this.props.value} onChange={this.valueChanged} autoComplete="off" />
+				<textarea ref="codemirror" name={this.props.path} defaultValue={this.props.value} autoComplete="off" />
 			</div>
 		);
 	}
