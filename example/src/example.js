@@ -1,10 +1,10 @@
-var React = require('react'),
-	Codemirror = require('react-codemirror');
+var React = require('react');
+var Codemirror = require('react-codemirror');
 
 var App = React.createClass({
 	getInitialState: function() {
 		return {
-			code: "// Code"
+			code: "# Heading\n\nSome **bold** and _italic_ text\nBy [Jed Watson](https://github.com/JedWatson)"
 		};
 	},
 	updateCode: function(newCode) {
