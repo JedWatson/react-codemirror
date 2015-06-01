@@ -18,8 +18,9 @@
     "react": "^0.13.3"
   },
   "devDependencies": {
-    "react-component-gulp-tasks": "^0.7.0",
-    "gulp": "^3.8.11"
+    "gulp": "^3.8.11",
+    "happiness": "^1.0.5",
+    "react-component-gulp-tasks": "^0.7.0"
   },
   "browserify-shim": {
     "react": "global:React"
@@ -31,7 +32,15 @@
     "release": "gulp release",
     "start": "gulp dev",
     "test": "echo \"no tests yet\" && exit 0",
+    "lint": "happiness",
     "watch": "gulp watch:lib"
+  },
+  "happiness": {
+    "ignore": [
+      "**/.publish/**",
+      "**/dist/**",
+      "**/lib/**"
+    ]
   },
   "readmeFilename": "README.md",
   "keywords": [
