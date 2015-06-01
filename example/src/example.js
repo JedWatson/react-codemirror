@@ -2,21 +2,21 @@ var React = require('react');
 var Codemirror = require('react-codemirror');
 
 var App = React.createClass({
-	getInitialState: function() {
+	getInitialState () {
 		return {
-			code: "# Heading\n\nSome **bold** and _italic_ text\nBy [Jed Watson](https://github.com/JedWatson)"
+			code: '# Heading\n\nSome **bold** and _italic_ text\nBy [Jed Watson](https://github.com/JedWatson)'
 		};
 	},
-	updateCode: function(newCode) {
+	updateCode (newCode) {
 		this.setState({
 			code: newCode
 		});
 	},
-	render: function() {
+	render () {
 		var options = {
 			lineNumbers: true
 		};
-		return <Codemirror value={this.state.code} onChange={this.updateCode} options={options} />
+		return <Codemirror value={this.state.code} onChange={this.updateCode} options={options} />;
 	}
 });
 
