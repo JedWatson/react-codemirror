@@ -3,6 +3,13 @@ var React = require('react');
 
 var CodeMirror = React.createClass({
 
+	propTypes: {
+		onChange: React.PropTypes.func,
+		options: React.PropTypes.object,
+		path: React.PropTypes.string,
+		value: React.PropTypes.string
+	},
+
 	getInitialState () {
 		return {
 			isFocused: false
