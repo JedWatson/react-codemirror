@@ -8,6 +8,13 @@ var React = (typeof window !== "undefined" ? window.React : typeof global !== "u
 var CodeMirror = React.createClass({
 	displayName: 'CodeMirror',
 
+	propTypes: {
+		onChange: React.PropTypes.func,
+		options: React.PropTypes.object,
+		path: React.PropTypes.string,
+		value: React.PropTypes.string
+	},
+
 	getInitialState: function getInitialState() {
 		return {
 			isFocused: false
