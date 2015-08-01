@@ -61,6 +61,7 @@ React.render(<App />, document.getElementById('app'));
 * `value` `String` the editor value
 * `options` `Object (newValue)` options passed to the CodeMirror instance
 * `onChange` `Function (newValue)` called when a change is made
+* `onFocusChanged` `Function (focused)` called when the editor is focused or loses focus
 
 See the [CodeMirror API Docs](https://codemirror.net/doc/manual.html#api) for the available options.
 

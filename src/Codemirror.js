@@ -5,6 +5,7 @@ var CodeMirror = React.createClass({
 
 	propTypes: {
 		onChange: React.PropTypes.func,
+		onFocusChanged: React.PropTypes.func,
 		options: React.PropTypes.object,
 		path: React.PropTypes.string,
 		value: React.PropTypes.string
@@ -51,6 +52,7 @@ var CodeMirror = React.createClass({
 		this.setState({
 			isFocused: focused
 		});
+		this.props.onFocusChanged && this.props.onFocusChanged(focused);
 	},
 
 	codemirrorValueChanged (doc, change) {
