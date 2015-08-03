@@ -1,6 +1,6 @@
 {
   "name": "react-codemirror",
-  "version": "0.2.0",
+  "version": "0.1.3",
   "description": "Codemirror",
   "main": "lib/Codemirror.js",
   "author": "Jed Watson",
