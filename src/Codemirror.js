@@ -37,6 +37,11 @@ var CodeMirror = React.createClass({
 		if (this.codeMirror && this._currentCodemirrorValue !== nextProps.value) {
 			this.codeMirror.setValue(nextProps.value);
 		}
+		if (typeof nextProps.options === 'object') {
+			for (optionName in nextProps.options) {
+				this.codeMirror.setOption(optionName, nextProps.options[optionName]);
+			}
+		}
 	},
 
 	getCodeMirror () {
