@@ -1,90 +1,4 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.Codemirror = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-(function (global){
-'use strict';
-
-var CM = require('codemirror');
-var React = (typeof window !== "undefined" ? window.React : typeof global !== "undefined" ? global.React : null);
-
-var CodeMirror = React.createClass({
-	displayName: 'CodeMirror',
-
-	propTypes: {
-		onChange: React.PropTypes.func,
-		onFocusChange: React.PropTypes.func,
-		options: React.PropTypes.object,
-		path: React.PropTypes.string,
-		value: React.PropTypes.string
-	},
-
-	getInitialState: function getInitialState() {
-		return {
-			isFocused: false
-		};
-	},
-
-	componentDidMount: function componentDidMount() {
-		var textareaNode = React.findDOMNode(this.refs.textarea);
-		this.codeMirror = CM.fromTextArea(textareaNode, this.props.options);
-		this.codeMirror.on('change', this.codemirrorValueChanged);
-		this.codeMirror.on('focus', this.focusChanged.bind(this, true));
-		this.codeMirror.on('blur', this.focusChanged.bind(this, false));
-		this._currentCodemirrorValue = this.props.value;
-	},
-
-	componentWillUnmount: function componentWillUnmount() {
-		// todo: is there a lighter-weight way to remove the cm instance?
-		if (this.codeMirror) {
-			this.codeMirror.toTextArea();
-		}
-	},
-
-	componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-		if (this.codeMirror && this._currentCodemirrorValue !== nextProps.value) {
-			this.codeMirror.setValue(nextProps.value);
-		}
-	},
-
-	getCodeMirror: function getCodeMirror() {
-		return this.codeMirror;
-	},
-
-	focus: function focus() {
-		if (this.codeMirror) {
-			this.codeMirror.focus();
-		}
-	},
-
-	focusChanged: function focusChanged(focused) {
-		this.setState({
-			isFocused: focused
-		});
-		this.props.onFocusChange && this.props.onFocusChange(focused);
-	},
-
-	codemirrorValueChanged: function codemirrorValueChanged(doc, change) {
-		var newValue = doc.getValue();
-		this._currentCodemirrorValue = newValue;
-		this.props.onChange && this.props.onChange(newValue);
-	},
-
-	render: function render() {
-		var className = 'ReactCodeMirror';
-		if (this.state.isFocused) {
-			className += ' ReactCodeMirror--focused';
-		}
-		return React.createElement(
-			'div',
-			{ className: className },
-			React.createElement('textarea', { ref: 'textarea', name: this.props.path, defaultValue: this.props.value, autoComplete: 'off' })
-		);
-	}
-
-});
-
-module.exports = CodeMirror;
-
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"codemirror":2}],2:[function(require,module,exports){
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: http://codemirror.net/LICENSE
 
@@ -1372,6 +1286,7 @@ module.exports = CodeMirror;
 
       on(te, "compositionstart", function() {
         var start = cm.getCursor("from");
+        if (input.composing) input.composing.range.clear()
         input.composing = {
           start: start,
           range: cm.markText(start, cm.getCursor("to"), {className: "CodeMirror-composing"})
@@ -1620,6 +1535,10 @@ module.exports = CodeMirror;
       }
     },
 
+    readOnlyChanged: function(val) {
+      if (!val) this.reset();
+    },
+
     setUneditable: nothing,
 
     needsContentAttribute: false
@@ -1638,7 +1557,6 @@ module.exports = CodeMirror;
     init: function(display) {
       var input = this, cm = input.cm;
       var div = input.div = display.lineDiv;
-      div.contentEditable = "true";
       disableBrowserMagic(div);
 
       on(div, "paste", function(e) { handlePaste(e, cm); })
@@ -1679,7 +1597,7 @@ module.exports = CodeMirror;
 
       on(div, "input", function() {
         if (input.composing) return;
-        if (!input.pollContent())
+        if (isReadOnly(cm) || !input.pollContent())
           runInOp(input.cm, function() {regChange(cm);});
       });
 
@@ -1904,17 +1822,24 @@ module.exports = CodeMirror;
       this.div.focus();
     },
     applyComposition: function(composing) {
-      if (composing.data && composing.data != composing.startData)
+      if (isReadOnly(this.cm))
+        operation(this.cm, regChange)(this.cm)
+      else if (composing.data && composing.data != composing.startData)
         operation(this.cm, applyTextInput)(this.cm, composing.data, 0, composing.sel);
     },
 
     setUneditable: function(node) {
-      node.setAttribute("contenteditable", "false");
+      node.contentEditable = "false"
     },
 
     onKeyPress: function(e) {
       e.preventDefault();
-      operation(this.cm, applyTextInput)(this.cm, String.fromCharCode(e.charCode == null ? e.keyCode : e.charCode), 0);
+      if (!isReadOnly(this.cm))
+        operation(this.cm, applyTextInput)(this.cm, String.fromCharCode(e.charCode == null ? e.keyCode : e.charCode), 0);
+    },
+
+    readOnlyChanged: function(val) {
+      this.div.contentEditable = String(val != "nocursor")
     },
 
     onContextMenu: nothing,
@@ -5475,8 +5400,8 @@ module.exports = CodeMirror;
       cm.display.disabled = true;
     } else {
       cm.display.disabled = false;
-      if (!val) cm.display.input.reset();
     }
+    cm.display.input.readOnlyChanged(val)
   });
   option("disableInput", false, function(cm, val) {if (!val) cm.display.input.reset();}, true);
   option("dragDrop", true, dragDropChanged);
@@ -7039,7 +6964,7 @@ module.exports = CodeMirror;
           txt.setAttribute("cm-text", "\t");
           builder.col += tabWidth;
         } else if (m[0] == "\r" || m[0] == "\n") {
-          var txt = content.appendChild(elt("span", m[0] == "\r" ? "␍" : "␤", "cm-invalidchar"));
+          var txt = content.appendChild(elt("span", m[0] == "\r" ? "\u240d" : "\u2424", "cm-invalidchar"));
           txt.setAttribute("cm-text", m[0]);
           builder.col += 1;
         } else {
@@ -8298,7 +8223,7 @@ module.exports = CodeMirror;
 
   // The inverse of countColumn -- find the offset that corresponds to
   // a particular column.
-  function findColumn(string, goal, tabSize) {
+  var findColumn = CodeMirror.findColumn = function(string, goal, tabSize) {
     for (var pos = 0, col = 0;;) {
       var nextTab = string.indexOf("\t", pos);
       if (nextTab == -1) nextTab = string.length;
@@ -8591,14 +8516,16 @@ module.exports = CodeMirror;
 
   // KEY NAMES
 
-  var keyNames = {3: "Enter", 8: "Backspace", 9: "Tab", 13: "Enter", 16: "Shift", 17: "Ctrl", 18: "Alt",
-                  19: "Pause", 20: "CapsLock", 27: "Esc", 32: "Space", 33: "PageUp", 34: "PageDown", 35: "End",
-                  36: "Home", 37: "Left", 38: "Up", 39: "Right", 40: "Down", 44: "PrintScrn", 45: "Insert",
-                  46: "Delete", 59: ";", 61: "=", 91: "Mod", 92: "Mod", 93: "Mod", 107: "=", 109: "-", 127: "Delete",
-                  173: "-", 186: ";", 187: "=", 188: ",", 189: "-", 190: ".", 191: "/", 192: "`", 219: "[", 220: "\\",
-                  221: "]", 222: "'", 63232: "Up", 63233: "Down", 63234: "Left", 63235: "Right", 63272: "Delete",
-                  63273: "Home", 63275: "End", 63276: "PageUp", 63277: "PageDown", 63302: "Insert"};
-  CodeMirror.keyNames = keyNames;
+  var keyNames = CodeMirror.keyNames = {
+    3: "Enter", 8: "Backspace", 9: "Tab", 13: "Enter", 16: "Shift", 17: "Ctrl", 18: "Alt",
+    19: "Pause", 20: "CapsLock", 27: "Esc", 32: "Space", 33: "PageUp", 34: "PageDown", 35: "End",
+    36: "Home", 37: "Left", 38: "Up", 39: "Right", 40: "Down", 44: "PrintScrn", 45: "Insert",
+    46: "Delete", 59: ";", 61: "=", 91: "Mod", 92: "Mod", 93: "Mod",
+    106: "*", 107: "=", 109: "-", 110: ".", 111: "/", 127: "Delete",
+    173: "-", 186: ";", 187: "=", 188: ",", 189: "-", 190: ".", 191: "/", 192: "`", 219: "[", 220: "\\",
+    221: "]", 222: "'", 63232: "Up", 63233: "Down", 63234: "Left", 63235: "Right", 63272: "Delete",
+    63273: "Home", 63275: "End", 63276: "PageUp", 63277: "PageDown", 63302: "Insert"
+  };
   (function() {
     // Number keys
     for (var i = 0; i < 10; i++) keyNames[i + 48] = keyNames[i + 96] = String(i);
@@ -8903,10 +8830,97 @@ module.exports = CodeMirror;
 
   // THE END
 
-  CodeMirror.version = "5.6.0";
+  CodeMirror.version = "5.7.0";
 
   return CodeMirror;
 });
 
-},{}]},{},[1])(1)
+},{}],2:[function(require,module,exports){
+(function (global){
+'use strict';
+
+var CM = require('codemirror');
+var React = (typeof window !== "undefined" ? window['React'] : typeof global !== "undefined" ? global['React'] : null);
+
+var CodeMirror = React.createClass({
+	displayName: 'CodeMirror',
+
+	propTypes: {
+		onChange: React.PropTypes.func,
+		onFocusChange: React.PropTypes.func,
+		options: React.PropTypes.object,
+		path: React.PropTypes.string,
+		value: React.PropTypes.string
+	},
+
+	getInitialState: function getInitialState() {
+		return {
+			isFocused: false
+		};
+	},
+
+	componentDidMount: function componentDidMount() {
+		var textareaNode = React.findDOMNode(this.refs.textarea);
+		this.codeMirror = CM.fromTextArea(textareaNode, this.props.options);
+		this.codeMirror.on('change', this.codemirrorValueChanged);
+		this.codeMirror.on('focus', this.focusChanged.bind(this, true));
+		this.codeMirror.on('blur', this.focusChanged.bind(this, false));
+		this._currentCodemirrorValue = this.props.value;
+		this.codeMirror.setValue(this.props.value);
+	},
+
+	componentWillUnmount: function componentWillUnmount() {
+		// todo: is there a lighter-weight way to remove the cm instance?
+		if (this.codeMirror) {
+			this.codeMirror.toTextArea();
+		}
+	},
+
+	componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+		if (this.codeMirror && this._currentCodemirrorValue !== nextProps.value) {
+			this.codeMirror.setValue(nextProps.value);
+		}
+	},
+
+	getCodeMirror: function getCodeMirror() {
+		return this.codeMirror;
+	},
+
+	focus: function focus() {
+		if (this.codeMirror) {
+			this.codeMirror.focus();
+		}
+	},
+
+	focusChanged: function focusChanged(focused) {
+		this.setState({
+			isFocused: focused
+		});
+		this.props.onFocusChange && this.props.onFocusChange(focused);
+	},
+
+	codemirrorValueChanged: function codemirrorValueChanged(doc, change) {
+		var newValue = doc.getValue();
+		this._currentCodemirrorValue = newValue;
+		this.props.onChange && this.props.onChange(newValue);
+	},
+
+	render: function render() {
+		var className = 'ReactCodeMirror';
+		if (this.state.isFocused) {
+			className += ' ReactCodeMirror--focused';
+		}
+		return React.createElement(
+			'div',
+			{ className: className },
+			React.createElement('textarea', { ref: 'textarea', name: this.props.path, defaultValue: '', autoComplete: 'off' })
+		);
+	}
+
+});
+
+module.exports = CodeMirror;
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"codemirror":1}]},{},[2])(2)
 });
