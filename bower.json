@@ -1,6 +1,6 @@
 {
   "name": "react-codemirror",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "React Codemirror",
   "main": "dist/codemirror.min.js",
   "homepage": "https://github.com/JedWatson/react-codemirror",
