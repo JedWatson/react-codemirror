@@ -24,6 +24,7 @@ var CodeMirror = React.createClass({
 		this.codeMirror.on('focus', this.focusChanged.bind(this, true));
 		this.codeMirror.on('blur', this.focusChanged.bind(this, false));
 		this._currentCodemirrorValue = this.props.value;
+		this.codeMirror.setValue(this.props.value);
 	},
 
 	componentWillUnmount () {
@@ -69,7 +70,7 @@ var CodeMirror = React.createClass({
 		}
 		return (
 			<div className={className}>
-				<textarea ref="textarea" name={this.props.path} defaultValue={this.props.value} autoComplete="off" />
+				<textarea ref="textarea" name={this.props.path} defaultValue={''} autoComplete="off" />
 			</div>
 		);
 	}
