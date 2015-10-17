@@ -4,6 +4,7 @@
   "description": "Codemirror",
   "main": "lib/Codemirror.js",
   "author": "Jed Watson",
+  "license": "MIT",
   "homepage": "https://github.com/JedWatson/react-codemirror",
   "repository": {
     "type": "git",
