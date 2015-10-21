@@ -40,7 +40,9 @@ var CodeMirror = React.createClass({
 		}
 		if (typeof nextProps.options === 'object') {
 			for (optionName in nextProps.options) {
-				this.codeMirror.setOption(optionName, nextProps.options[optionName]);
+				if (nextProps.options.hasOwnProperty(optionName)) {
+					this.codeMirror.setOption(optionName, nextProps.options[optionName]);
+				}
 			}
 		}
 	},
