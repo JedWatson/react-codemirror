@@ -1,5 +1,6 @@
 var CM = require('codemirror');
 var React = require('react');
+var className = require('classnames');
 
 var CodeMirror = React.createClass({
 
@@ -8,7 +9,8 @@ var CodeMirror = React.createClass({
 		onFocusChange: React.PropTypes.func,
 		options: React.PropTypes.object,
 		path: React.PropTypes.string,
-		value: React.PropTypes.string
+		value: React.PropTypes.string,
+		className: React.PropTypes.any,
 	},
 
 	getInitialState () {
@@ -71,12 +73,13 @@ var CodeMirror = React.createClass({
 	},
 
 	render () {
-		var className = 'ReactCodeMirror';
+		var editorClassName = className('ReactCodeMirror', this.props.className);
+
 		if (this.state.isFocused) {
 			className += ' ReactCodeMirror--focused';
 		}
 		return (
-			<div className={className}>
+			<div className={editorClassName}>
 				<textarea ref="textarea" name={this.props.path} defaultValue={''} autoComplete="off" />
 			</div>
 		);
