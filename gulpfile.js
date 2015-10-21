@@ -15,9 +15,7 @@ var taskConfig = {
 	component: {
 		name: 'Codemirror',
 		dependencies: [
-			'classnames',
-			'react',
-			'react/addons'
+			'react'
 		],
 		lib: 'lib'
 	},
