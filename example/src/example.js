@@ -4,6 +4,7 @@ var Codemirror = require('react-codemirror');
 var App = React.createClass({
 	getInitialState () {
 		return {
+			readOnly: false,
 			code: '# Heading\n\nSome **bold** and _italic_ text\nBy [Jed Watson](https://github.com/JedWatson)'
 		};
 	},
@@ -12,11 +13,24 @@ var App = React.createClass({
 			code: newCode
 		});
 	},
+	toggleReadOnly () {
+		this.setState({
+			readOnly: !this.state.readOnly
+		}, () => this.refs.editor.focus());
+	},
 	render () {
 		var options = {
-			lineNumbers: true
+			lineNumbers: true,
+			readOnly: this.state.readOnly
 		};
-		return <Codemirror value={this.state.code} onChange={this.updateCode} options={options} />;
+		return (
+			<div>
+				<Codemirror ref="editor" value={this.state.code} onChange={this.updateCode} options={options} />
+				<div style={{ marginTop: 10 }}>
+					<button onClick={this.toggleReadOnly}>Toggle read-only mode (currently {this.state.readOnly ? 'on' : 'off'})</button>
+				</div>
+			</div>
+		);
 	}
 });
 
