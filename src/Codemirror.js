@@ -18,7 +18,7 @@ var CodeMirror = React.createClass({
 	},
 
 	componentDidMount () {
-		var textareaNode = React.findDOMNode(this.refs.textarea);
+		var textareaNode = this.refs.textarea;
 		this.codeMirror = CM.fromTextArea(textareaNode, this.props.options);
 		this.codeMirror.on('change', this.codemirrorValueChanged);
 		this.codeMirror.on('focus', this.focusChanged.bind(this, true));
