@@ -14,17 +14,17 @@
     "url": "https://github.com/JedWatson/react-codemirror/issues"
   },
   "dependencies": {
-    "classnames": "^2.1.5",
+    "classnames": "^2.2.0",
     "codemirror": "^5.7.0"
   },
   "devDependencies": {
     "gulp": "^3.9.0",
     "happiness": "^1.0.7",
-    "react": "^0.13.3",
+    "react": "^0.14.0",
     "react-component-gulp-tasks": "^0.7.6"
   },
   "peerDependencies": {
-    "react": "^0.13 || ^0.14.0-beta"
+    "react": "^0.14.0"
   },
   "browserify-shim": {
     "react": "global:React"
