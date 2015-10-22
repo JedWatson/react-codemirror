@@ -8986,11 +8986,8 @@ var CodeMirror = React.createClass({
 	},
 
 	render: function render() {
-		var editorClassName = className('ReactCodeMirror', this.props.className);
+		var editorClassName = className('ReactCodeMirror', this.state.isFocused ? 'ReactCodeMirror--focused' : null, this.props.className);
 
-		if (this.state.isFocused) {
-			className += ' ReactCodeMirror--focused';
-		}
 		return React.createElement(
 			'div',
 			{ className: editorClassName },

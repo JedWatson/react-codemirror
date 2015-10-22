@@ -73,11 +73,12 @@ var CodeMirror = React.createClass({
 	},
 
 	render () {
-		var editorClassName = className('ReactCodeMirror', this.props.className);
+		var editorClassName = className(
+			'ReactCodeMirror',
+			this.state.isFocused ? 'ReactCodeMirror--focused' : null,
+			this.props.className
+		);
 
-		if (this.state.isFocused) {
-			className += ' ReactCodeMirror--focused';
-		}
 		return (
 			<div className={editorClassName}>
 				<textarea ref="textarea" name={this.props.path} defaultValue={''} autoComplete="off" />
