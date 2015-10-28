@@ -1,5 +1,6 @@
 var CM = require('codemirror');
 var React = require('react');
+var className = require('classnames');
 
 var CodeMirror = React.createClass({
 
@@ -8,7 +9,8 @@ var CodeMirror = React.createClass({
 		onFocusChange: React.PropTypes.func,
 		options: React.PropTypes.object,
 		path: React.PropTypes.string,
-		value: React.PropTypes.string
+		value: React.PropTypes.string,
+		className: React.PropTypes.any,
 	},
 
 	getInitialState () {
@@ -18,7 +20,7 @@ var CodeMirror = React.createClass({
 	},
 
 	componentDidMount () {
-		var textareaNode = React.findDOMNode(this.refs.textarea);
+		var textareaNode = this.refs.textarea;
 		this.codeMirror = CM.fromTextArea(textareaNode, this.props.options);
 		this.codeMirror.on('change', this.codemirrorValueChanged);
 		this.codeMirror.on('focus', this.focusChanged.bind(this, true));
@@ -71,12 +73,14 @@ var CodeMirror = React.createClass({
 	},
 
 	render () {
-		var className = 'ReactCodeMirror';
-		if (this.state.isFocused) {
-			className += ' ReactCodeMirror--focused';
-		}
+		var editorClassName = className(
+			'ReactCodeMirror',
+			this.state.isFocused ? 'ReactCodeMirror--focused' : null,
+			this.props.className
+		);
+
 		return (
-			<div className={className}>
+			<div className={editorClassName}>
 				<textarea ref="textarea" name={this.props.path} defaultValue={''} autoComplete="off" />
 			</div>
 		);
