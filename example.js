@@ -85,7 +85,57 @@ var App = React.createClass({
 
 React.render(React.createElement(App, null), document.getElementById('app'));
 
-},{"../../src/Codemirror":7,"codemirror/mode/javascript/javascript":3,"codemirror/mode/markdown/markdown":4,"codemirror/mode/xml/xml":6,"react":undefined}],2:[function(require,module,exports){
+},{"../../src/Codemirror":8,"codemirror/mode/javascript/javascript":4,"codemirror/mode/markdown/markdown":5,"codemirror/mode/xml/xml":7,"react":undefined}],2:[function(require,module,exports){
+/*!
+  Copyright (c) 2015 Jed Watson.
+  Licensed under the MIT License (MIT), see
+  http://jedwatson.github.io/classnames
+*/
+/* global define */
+
+(function () {
+	'use strict';
+
+	var hasOwn = {}.hasOwnProperty;
+
+	function classNames () {
+		var classes = '';
+
+		for (var i = 0; i < arguments.length; i++) {
+			var arg = arguments[i];
+			if (!arg) continue;
+
+			var argType = typeof arg;
+
+			if (argType === 'string' || argType === 'number') {
+				classes += ' ' + arg;
+			} else if (Array.isArray(arg)) {
+				classes += ' ' + classNames.apply(null, arg);
+			} else if (argType === 'object') {
+				for (var key in arg) {
+					if (hasOwn.call(arg, key) && arg[key]) {
+						classes += ' ' + key;
+					}
+				}
+			}
+		}
+
+		return classes.substr(1);
+	}
+
+	if (typeof module !== 'undefined' && module.exports) {
+		module.exports = classNames;
+	} else if (typeof define === 'function' && typeof define.amd === 'object' && define.amd) {
+		// register as 'classnames', consistent with npm package name
+		define('classnames', function () {
+			return classNames;
+		});
+	} else {
+		window.classNames = classNames;
+	}
+}());
+
+},{}],3:[function(require,module,exports){
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: http://codemirror.net/LICENSE
 
@@ -8943,7 +8993,7 @@ React.render(React.createElement(App, null), document.getElementById('app'));
   return CodeMirror;
 });
 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: http://codemirror.net/LICENSE
 
@@ -9668,7 +9718,7 @@ CodeMirror.defineMIME("application/typescript", { name: "javascript", typescript
 
 });
 
-},{"../../lib/codemirror":2}],4:[function(require,module,exports){
+},{"../../lib/codemirror":3}],5:[function(require,module,exports){
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: http://codemirror.net/LICENSE
 
@@ -10473,7 +10523,7 @@ CodeMirror.defineMIME("text/x-markdown", "markdown");
 
 });
 
-},{"../../lib/codemirror":2,"../meta":5,"../xml/xml":6}],5:[function(require,module,exports){
+},{"../../lib/codemirror":3,"../meta":6,"../xml/xml":7}],6:[function(require,module,exports){
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: http://codemirror.net/LICENSE
 
@@ -10672,7 +10722,7 @@ CodeMirror.defineMIME("text/x-markdown", "markdown");
   };
 });
 
-},{"../lib/codemirror":2}],6:[function(require,module,exports){
+},{"../lib/codemirror":3}],7:[function(require,module,exports){
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: http://codemirror.net/LICENSE
 
@@ -11059,11 +11109,12 @@ if (!CodeMirror.mimeModes.hasOwnProperty("text/html"))
 
 });
 
-},{"../../lib/codemirror":2}],7:[function(require,module,exports){
+},{"../../lib/codemirror":3}],8:[function(require,module,exports){
 'use strict';
 
 var CM = require('codemirror');
 var React = require('react');
+var className = require('classnames');
 
 var CodeMirror = React.createClass({
 	displayName: 'CodeMirror',
@@ -11073,7 +11124,8 @@ var CodeMirror = React.createClass({
 		onFocusChange: React.PropTypes.func,
 		options: React.PropTypes.object,
 		path: React.PropTypes.string,
-		value: React.PropTypes.string
+		value: React.PropTypes.string,
+		className: React.PropTypes.any
 	},
 
 	getInitialState: function getInitialState() {
@@ -11083,7 +11135,7 @@ var CodeMirror = React.createClass({
 	},
 
 	componentDidMount: function componentDidMount() {
-		var textareaNode = React.findDOMNode(this.refs.textarea);
+		var textareaNode = this.refs.textarea;
 		this.codeMirror = CM.fromTextArea(textareaNode, this.props.options);
 		this.codeMirror.on('change', this.codemirrorValueChanged);
 		this.codeMirror.on('focus', this.focusChanged.bind(this, true));
@@ -11136,13 +11188,11 @@ var CodeMirror = React.createClass({
 	},
 
 	render: function render() {
-		var className = 'ReactCodeMirror';
-		if (this.state.isFocused) {
-			className += ' ReactCodeMirror--focused';
-		}
+		var editorClassName = className('ReactCodeMirror', this.state.isFocused ? 'ReactCodeMirror--focused' : null, this.props.className);
+
 		return React.createElement(
 			'div',
-			{ className: className },
+			{ className: editorClassName },
 			React.createElement('textarea', { ref: 'textarea', name: this.props.path, defaultValue: '', autoComplete: 'off' })
 		);
 	}
@@ -11151,4 +11201,4 @@ var CodeMirror = React.createClass({
 
 module.exports = CodeMirror;
 
-},{"codemirror":2,"react":undefined}]},{},[1]);
+},{"classnames":2,"codemirror":3,"react":undefined}]},{},[1]);
