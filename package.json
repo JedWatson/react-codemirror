@@ -15,13 +15,13 @@
   },
   "dependencies": {
     "classnames": "^2.2.0",
-    "codemirror": "^5.7.0"
+    "codemirror": "^5.8.0"
   },
   "devDependencies": {
     "gulp": "^3.9.0",
     "happiness": "^1.0.7",
     "react": "^0.14.0",
-    "react-component-gulp-tasks": "^0.7.6"
+    "react-component-gulp-tasks": "^0.7.7"
   },
   "peerDependencies": {
     "react": "^0.14.0"
