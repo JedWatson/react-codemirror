@@ -31,8 +31,8 @@ npm install react-codemirror --save
 ## Usage
 
 ```
-var React = require('react'),
-	Codemirror = require('react-codemirror');
+var React = require('react');
+var Codemirror = require('react-codemirror');
 
 var App = React.createClass({
 	getInitialState: function() {
@@ -65,7 +65,30 @@ React.render(<App />, document.getElementById('app'));
 
 See the [CodeMirror API Docs](https://codemirror.net/doc/manual.html#api) for the available options.
 
+### Using Language Modes
+
+Several [language modes](https://codemirror.net/mode/) are included with CodeMirror for syntax hilighting.
+
+By default (to optimise bundle size) all modes are not included. To enable syntax hilighting:
+
+* install the `codemirror` package dependency (in addition to `react-codemirror`)
+* require the language modes you wish to make available _after_ you require `react-codemirror` itself
+* set the `mode` option in the `options` object
+
+```js
+var React = require('react');
+var Codemirror = require('react-codemirror');
+require('codemirror/mode/javascript/javascript');
+require('codemirror/mode/xml/xml');
+require('codemirror/mode/markdown/markdown');
+
+<Codemirror ... options={{
+	mode: 'javascript'
+}} />
+```
+
+See the [example source](https://github.com/JedWatson/react-codemirror/blob/master/example/src/example.js) for a reference implementation including JavaScript and markdown syntax hilighting.
+
 ### License
 
 MIT. Copyright (c) 2015 Jed Watson.
-
