@@ -25,8 +25,8 @@ var CodeMirror = React.createClass({
 		this.codeMirror.on('change', this.codemirrorValueChanged);
 		this.codeMirror.on('focus', this.focusChanged.bind(this, true));
 		this.codeMirror.on('blur', this.focusChanged.bind(this, false));
-		this._currentCodemirrorValue = this.props.value;
-		this.codeMirror.setValue(this.props.value);
+		this._currentCodemirrorValue = this.props.defaultValue || this.props.value || '';
+		this.codeMirror.setValue(this._currentCodemirrorValue);
 	},
 
 	componentWillUnmount () {
@@ -37,7 +37,7 @@ var CodeMirror = React.createClass({
 	},
 
 	componentWillReceiveProps (nextProps) {
-		if (this.codeMirror && this._currentCodemirrorValue !== nextProps.value) {
+		if (this.codeMirror && nextProps.value !== undefined && this._currentCodemirrorValue !== nextProps.value) {
 			this.codeMirror.setValue(nextProps.value);
 		}
 		if (typeof nextProps.options === 'object') {
