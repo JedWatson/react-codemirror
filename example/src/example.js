@@ -1,4 +1,5 @@
 var React = require('react');
+var ReactDOM = require('react-dom');
 var Codemirror = require('../../src/Codemirror');
 
 require('codemirror/mode/javascript/javascript');
@@ -56,4 +57,4 @@ var App = React.createClass({
 	}
 });
 
-React.render(<App />, document.getElementById('app'));
+ReactDOM.render(<App />, document.getElementById('app'));
