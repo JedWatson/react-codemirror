@@ -1,7 +1,6 @@
 var CM = require('codemirror');
 var React = require('react');
 var className = require('classnames');
-
 var CodeMirror = React.createClass({
 
 	propTypes: {
@@ -18,7 +17,6 @@ var CodeMirror = React.createClass({
 			isFocused: false
 		};
 	},
-
 	componentDidMount () {
 		var textareaNode = this.refs.textarea;
 		this.codeMirror = CM.fromTextArea(textareaNode, this.props.options);
@@ -27,8 +25,8 @@ var CodeMirror = React.createClass({
 		this.codeMirror.on('blur', this.focusChanged.bind(this, false));
 		this._currentCodemirrorValue = this.props.defaultValue || this.props.value || '';
 		this.codeMirror.setValue(this._currentCodemirrorValue);
+		this.props.interact(this.codeMirror);
 	},
-
 	componentWillUnmount () {
 		// todo: is there a lighter-weight way to remove the cm instance?
 		if (this.codeMirror) {
