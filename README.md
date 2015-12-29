@@ -58,11 +58,11 @@ React.render(<App />, document.getElementById('app'));
 
 ### Properties
 
+* `autoSave` `Boolean` automatically persist changes to underlying textarea (default false)
 * `value` `String` the editor value
 * `options` `Object (newValue)` options passed to the CodeMirror instance
 * `onChange` `Function (newValue)` called when a change is made
 * `onFocusChange` `Function (focused)` called when the editor is focused or loses focus
-* `autoSave` `Boolean` automatically persist changes to underlying textarea (default false)
 
 See the [CodeMirror API Docs](https://codemirror.net/doc/manual.html#api) for the available options.
 
