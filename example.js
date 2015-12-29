@@ -2,6 +2,7 @@ require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof requ
 'use strict';
 
 var React = require('react');
+var ReactDOM = require('react-dom');
 var Codemirror = require('../../src/Codemirror');
 
 require('codemirror/mode/javascript/javascript');
@@ -44,6 +45,9 @@ var App = React.createClass({
 			return _this.refs.editor.focus();
 		});
 	},
+	interact: function interact(cm) {
+		console.log(cm.getValue());
+	},
 	render: function render() {
 		var options = {
 			lineNumbers: true,
@@ -53,7 +57,7 @@ var App = React.createClass({
 		return React.createElement(
 			'div',
 			null,
-			React.createElement(Codemirror, { ref: 'editor', value: this.state.code, onChange: this.updateCode, options: options }),
+			React.createElement(Codemirror, { ref: 'editor', value: this.state.code, onChange: this.updateCode, options: options, interact: this.interact }),
 			React.createElement(
 				'div',
 				{ style: { marginTop: 10 } },
@@ -83,9 +87,9 @@ var App = React.createClass({
 	}
 });
 
-React.render(React.createElement(App, null), document.getElementById('app'));
+ReactDOM.render(React.createElement(App, null), document.getElementById('app'));
 
-},{"../../src/Codemirror":8,"codemirror/mode/javascript/javascript":4,"codemirror/mode/markdown/markdown":5,"codemirror/mode/xml/xml":7,"react":undefined}],2:[function(require,module,exports){
+},{"../../src/Codemirror":8,"codemirror/mode/javascript/javascript":4,"codemirror/mode/markdown/markdown":5,"codemirror/mode/xml/xml":7,"react":undefined,"react-dom":undefined}],2:[function(require,module,exports){
 /*!
   Copyright (c) 2015 Jed Watson.
   Licensed under the MIT License (MIT), see
@@ -127,7 +131,7 @@ React.render(React.createElement(App, null), document.getElementById('app'));
 		module.exports = classNames;
 	} else if (typeof define === 'function' && typeof define.amd === 'object' && define.amd) {
 		// register as 'classnames', consistent with npm package name
-		define('classnames', [], function () {
+		define('classnames', function () {
 			return classNames;
 		});
 	} else {
@@ -548,7 +552,7 @@ React.render(React.createElement(App, null), document.getElementById('app'));
       if (horiz.clientWidth) scroll(horiz.scrollLeft, "horizontal");
     });
 
-    this.checkedZeroWidth = false;
+    this.checkedOverlay = false;
     // Need to set a minimum width to see the scrollbar on IE7 (but must not set it on IE8).
     if (ie && ie_version < 8) this.horiz.style.minHeight = this.vert.style.minWidth = "18px";
   }
@@ -583,43 +587,29 @@ React.render(React.createElement(App, null), document.getElementById('app'));
         this.horiz.firstChild.style.width = "0";
       }
 
-      if (!this.checkedZeroWidth && measure.clientHeight > 0) {
-        if (sWidth == 0) this.zeroWidthHack();
-        this.checkedZeroWidth = true;
+      if (!this.checkedOverlay && measure.clientHeight > 0) {
+        if (sWidth == 0) this.overlayHack();
+        this.checkedOverlay = true;
       }
 
       return {right: needsV ? sWidth : 0, bottom: needsH ? sWidth : 0};
     },
     setScrollLeft: function(pos) {
       if (this.horiz.scrollLeft != pos) this.horiz.scrollLeft = pos;
-      if (this.disableHoriz) this.enableZeroWidthBar(this.horiz, this.disableHoriz);
     },
     setScrollTop: function(pos) {
       if (this.vert.scrollTop != pos) this.vert.scrollTop = pos;
-      if (this.disableVert) this.enableZeroWidthBar(this.vert, this.disableVert);
     },
-    zeroWidthHack: function() {
+    overlayHack: function() {
       var w = mac && !mac_geMountainLion ? "12px" : "18px";
-      this.horiz.style.height = this.vert.style.width = w;
-      this.horiz.style.pointerEvents = this.vert.style.pointerEvents = "none";
-      this.disableHoriz = new Delayed;
-      this.disableVert = new Delayed;
-    },
-    enableZeroWidthBar: function(bar, delay) {
-      bar.style.pointerEvents = "auto";
-      function maybeDisable() {
-        // To find out whether the scrollbar is still visible, we
-        // check whether the element under the pixel in the bottom
-        // left corner of the scrollbar box is the scrollbar box
-        // itself (when the bar is still visible) or its filler child
-        // (when the bar is hidden). If it is still visible, we keep
-        // it enabled, if it's hidden, we disable pointer events.
-        var box = bar.getBoundingClientRect();
-        var elt = document.elementFromPoint(box.left + 1, box.bottom - 1);
-        if (elt != bar) bar.style.pointerEvents = "none";
-        else delay.set(1000, maybeDisable);
-      }
-      delay.set(1000, maybeDisable);
+      this.horiz.style.minHeight = this.vert.style.minWidth = w;
+      var self = this;
+      var barMouseDown = function(e) {
+        if (e_target(e) != self.vert && e_target(e) != self.horiz)
+          operation(self.cm, onMouseDown)(e);
+      };
+      on(this.vert, "mousedown", barMouseDown);
+      on(this.horiz, "mousedown", barMouseDown);
     },
     clear: function() {
       var parent = this.horiz.parentNode;
@@ -3245,8 +3235,7 @@ React.render(React.createElement(App, null), document.getElementById('app'));
 
     if (cm.state.focused && op.updateInput)
       cm.display.input.reset(op.typing);
-    if (op.focus && op.focus == activeElt() && (!document.hasFocus || document.hasFocus()))
-      ensureFocus(op.cm);
+    if (op.focus && op.focus == activeElt()) ensureFocus(op.cm);
   }
 
   function endOperation_finish(op) {
@@ -3931,7 +3920,7 @@ React.render(React.createElement(App, null), document.getElementById('app'));
 
   // Determines whether an event happened in the gutter, and fires the
   // handlers for the corresponding event.
-  function gutterEvent(cm, e, type, prevent) {
+  function gutterEvent(cm, e, type, prevent, signalfn) {
     try { var mX = e.clientX, mY = e.clientY; }
     catch(e) { return false; }
     if (mX >= Math.floor(cm.display.gutters.getBoundingClientRect().right)) return false;
@@ -3948,14 +3937,14 @@ React.render(React.createElement(App, null), document.getElementById('app'));
       if (g && g.getBoundingClientRect().right >= mX) {
         var line = lineAtHeight(cm.doc, mY);
         var gutter = cm.options.gutters[i];
-        signal(cm, type, cm, line, gutter, e);
+        signalfn(cm, type, cm, line, gutter, e);
         return e_defaultPrevented(e);
       }
     }
   }
 
   function clickInGutter(cm, e) {
-    return gutterEvent(cm, e, "gutterClick", true);
+    return gutterEvent(cm, e, "gutterClick", true, signalLater);
   }
 
   // Kludge to work around strange IE behavior where it'll sometimes
@@ -4394,7 +4383,7 @@ React.render(React.createElement(App, null), document.getElementById('app'));
 
   function contextMenuInGutter(cm, e) {
     if (!hasHandler(cm, "gutterContextMenu")) return false;
-    return gutterEvent(cm, e, "gutterContextMenu", false);
+    return gutterEvent(cm, e, "gutterContextMenu", false, signal);
   }
 
   // UPDATING
@@ -7227,7 +7216,7 @@ React.render(React.createElement(App, null), document.getElementById('app'));
               spanEndStyle = "";
             }
             if (m.className) spanStyle += " " + m.className;
-            if (m.css) css = (css ? css + ";" : "") + m.css;
+            if (m.css) css = m.css;
             if (m.startStyle && sp.from == pos) spanStartStyle += " " + m.startStyle;
             if (m.endStyle && sp.to == nextChange) spanEndStyle += " " + m.endStyle;
             if (m.title && !title) title = m.title;
@@ -7496,7 +7485,6 @@ React.render(React.createElement(App, null), document.getElementById('app'));
     this.id = ++nextDocId;
     this.modeOption = mode;
     this.lineSep = lineSep;
-    this.extend = false;
 
     if (typeof text == "string") text = this.splitLines(text);
     updateDoc(this, {from: start, to: start, text: text});
@@ -9004,7 +8992,7 @@ React.render(React.createElement(App, null), document.getElementById('app'));
 
   // THE END
 
-  CodeMirror.version = "5.9.0";
+  CodeMirror.version = "5.8.0";
 
   return CodeMirror;
 });
@@ -9044,12 +9032,12 @@ CodeMirror.defineMode("javascript", function(config, parserConfig) {
       "if": kw("if"), "while": A, "with": A, "else": B, "do": B, "try": B, "finally": B,
       "return": C, "break": C, "continue": C, "new": kw("new"), "delete": C, "throw": C, "debugger": C,
       "var": kw("var"), "const": kw("var"), "let": kw("var"),
-      "function": kw("function"), "catch": kw("catch"),
+      "async": kw("async"), "function": kw("function"), "catch": kw("catch"),
       "for": kw("for"), "switch": kw("switch"), "case": kw("case"), "default": kw("default"),
       "in": operator, "typeof": operator, "instanceof": operator,
       "true": atom, "false": atom, "null": atom, "undefined": atom, "NaN": atom, "Infinity": atom,
       "this": kw("this"), "class": kw("class"), "super": kw("atom"),
-      "yield": C, "export": kw("export"), "import": kw("import"), "extends": C
+      "await": C, "yield": C, "export": kw("export"), "import": kw("import"), "extends": C
     };
 
     // Extend the 'normal' keywords with the TypeScript language extensions
@@ -9133,7 +9121,8 @@ CodeMirror.defineMode("javascript", function(config, parserConfig) {
       } else if (stream.eat("/")) {
         stream.skipToEnd();
         return ret("comment", "comment");
-      } else if (/^(?:operator|sof|keyword c|case|new|[\[{}\(,;:])$/.test(state.lastType)) {
+      } else if (state.lastType == "operator" || state.lastType == "keyword c" ||
+                 state.lastType == "sof" || /^[\[{}\(,;:]$/.test(state.lastType)) {
         readRegexp(stream);
         stream.match(/^\b(([gimyu])(?![gimyu]*\2))+\b/);
         return ret("regexp", "string-2");
@@ -9384,6 +9373,7 @@ CodeMirror.defineMode("javascript", function(config, parserConfig) {
 
     var maybeop = noComma ? maybeoperatorNoComma : maybeoperatorComma;
     if (atomicTypes.hasOwnProperty(type)) return cont(maybeop);
+    if (type == "async") return cont(expression);
     if (type == "function") return cont(functiondef, maybeop);
     if (type == "keyword c") return cont(noComma ? maybeexpressionNoComma : maybeexpression);
     if (type == "(") return cont(pushlex(")"), maybeexpression, comprehension, expect(")"), poplex, maybeop);
@@ -9462,7 +9452,9 @@ CodeMirror.defineMode("javascript", function(config, parserConfig) {
     if (type == "variable") {cx.marked = "property"; return cont();}
   }
   function objprop(type, value) {
-    if (type == "variable" || cx.style == "keyword") {
+    if (type == "async") {
+      return cont(objprop);
+    } else if (type == "variable" || cx.style == "keyword") {
       cx.marked = "property";
       if (value == "get" || value == "set") return cont(getterSetter);
       return cont(afterprop);
@@ -9473,8 +9465,6 @@ CodeMirror.defineMode("javascript", function(config, parserConfig) {
       return cont(afterprop);
     } else if (type == "[") {
       return cont(expression, expect("]"), afterprop);
-    } else if (type == "spread") {
-      return cont(expression);
     }
   }
   function getterSetter(type) {
@@ -10447,7 +10437,7 @@ CodeMirror.defineMode("markdown", function(cmCfg, modeCfg) {
         f: s.f,
 
         prevLine: s.prevLine,
-        thisLine: s.thisLine,
+        thisLine: s.this,
 
         block: s.block,
         htmlState: s.htmlState && CodeMirror.copyState(htmlMode, s.htmlState),
@@ -11129,7 +11119,6 @@ if (!CodeMirror.mimeModes.hasOwnProperty("text/html"))
 var CM = require('codemirror');
 var React = require('react');
 var className = require('classnames');
-
 var CodeMirror = React.createClass({
 	displayName: 'CodeMirror',
 
@@ -11147,7 +11136,6 @@ var CodeMirror = React.createClass({
 			isFocused: false
 		};
 	},
-
 	componentDidMount: function componentDidMount() {
 		var textareaNode = this.refs.textarea;
 		this.codeMirror = CM.fromTextArea(textareaNode, this.props.options);
@@ -11157,7 +11145,6 @@ var CodeMirror = React.createClass({
 		this._currentCodemirrorValue = this.props.defaultValue || this.props.value || '';
 		this.codeMirror.setValue(this._currentCodemirrorValue);
 	},
-
 	componentWillUnmount: function componentWillUnmount() {
 		// todo: is there a lighter-weight way to remove the cm instance?
 		if (this.codeMirror) {

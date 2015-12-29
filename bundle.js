@@ -40,7 +40,7 @@ require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof requ
 		module.exports = classNames;
 	} else if (typeof define === 'function' && typeof define.amd === 'object' && define.amd) {
 		// register as 'classnames', consistent with npm package name
-		define('classnames', [], function () {
+		define('classnames', function () {
 			return classNames;
 		});
 	} else {
@@ -461,7 +461,7 @@ require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof requ
       if (horiz.clientWidth) scroll(horiz.scrollLeft, "horizontal");
     });
 
-    this.checkedZeroWidth = false;
+    this.checkedOverlay = false;
     // Need to set a minimum width to see the scrollbar on IE7 (but must not set it on IE8).
     if (ie && ie_version < 8) this.horiz.style.minHeight = this.vert.style.minWidth = "18px";
   }
@@ -496,43 +496,29 @@ require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof requ
         this.horiz.firstChild.style.width = "0";
       }
 
-      if (!this.checkedZeroWidth && measure.clientHeight > 0) {
-        if (sWidth == 0) this.zeroWidthHack();
-        this.checkedZeroWidth = true;
+      if (!this.checkedOverlay && measure.clientHeight > 0) {
+        if (sWidth == 0) this.overlayHack();
+        this.checkedOverlay = true;
       }
 
       return {right: needsV ? sWidth : 0, bottom: needsH ? sWidth : 0};
     },
     setScrollLeft: function(pos) {
       if (this.horiz.scrollLeft != pos) this.horiz.scrollLeft = pos;
-      if (this.disableHoriz) this.enableZeroWidthBar(this.horiz, this.disableHoriz);
     },
     setScrollTop: function(pos) {
       if (this.vert.scrollTop != pos) this.vert.scrollTop = pos;
-      if (this.disableVert) this.enableZeroWidthBar(this.vert, this.disableVert);
     },
-    zeroWidthHack: function() {
+    overlayHack: function() {
       var w = mac && !mac_geMountainLion ? "12px" : "18px";
-      this.horiz.style.height = this.vert.style.width = w;
-      this.horiz.style.pointerEvents = this.vert.style.pointerEvents = "none";
-      this.disableHoriz = new Delayed;
-      this.disableVert = new Delayed;
-    },
-    enableZeroWidthBar: function(bar, delay) {
-      bar.style.pointerEvents = "auto";
-      function maybeDisable() {
-        // To find out whether the scrollbar is still visible, we
-        // check whether the element under the pixel in the bottom
-        // left corner of the scrollbar box is the scrollbar box
-        // itself (when the bar is still visible) or its filler child
-        // (when the bar is hidden). If it is still visible, we keep
-        // it enabled, if it's hidden, we disable pointer events.
-        var box = bar.getBoundingClientRect();
-        var elt = document.elementFromPoint(box.left + 1, box.bottom - 1);
-        if (elt != bar) bar.style.pointerEvents = "none";
-        else delay.set(1000, maybeDisable);
-      }
-      delay.set(1000, maybeDisable);
+      this.horiz.style.minHeight = this.vert.style.minWidth = w;
+      var self = this;
+      var barMouseDown = function(e) {
+        if (e_target(e) != self.vert && e_target(e) != self.horiz)
+          operation(self.cm, onMouseDown)(e);
+      };
+      on(this.vert, "mousedown", barMouseDown);
+      on(this.horiz, "mousedown", barMouseDown);
     },
     clear: function() {
       var parent = this.horiz.parentNode;
@@ -3158,8 +3144,7 @@ require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof requ
 
     if (cm.state.focused && op.updateInput)
       cm.display.input.reset(op.typing);
-    if (op.focus && op.focus == activeElt() && (!document.hasFocus || document.hasFocus()))
-      ensureFocus(op.cm);
+    if (op.focus && op.focus == activeElt()) ensureFocus(op.cm);
   }
 
   function endOperation_finish(op) {
@@ -3844,7 +3829,7 @@ require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof requ
 
   // Determines whether an event happened in the gutter, and fires the
   // handlers for the corresponding event.
-  function gutterEvent(cm, e, type, prevent) {
+  function gutterEvent(cm, e, type, prevent, signalfn) {
     try { var mX = e.clientX, mY = e.clientY; }
     catch(e) { return false; }
     if (mX >= Math.floor(cm.display.gutters.getBoundingClientRect().right)) return false;
@@ -3861,14 +3846,14 @@ require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof requ
       if (g && g.getBoundingClientRect().right >= mX) {
         var line = lineAtHeight(cm.doc, mY);
         var gutter = cm.options.gutters[i];
-        signal(cm, type, cm, line, gutter, e);
+        signalfn(cm, type, cm, line, gutter, e);
         return e_defaultPrevented(e);
       }
     }
   }
 
   function clickInGutter(cm, e) {
-    return gutterEvent(cm, e, "gutterClick", true);
+    return gutterEvent(cm, e, "gutterClick", true, signalLater);
   }
 
   // Kludge to work around strange IE behavior where it'll sometimes
@@ -4307,7 +4292,7 @@ require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof requ
 
   function contextMenuInGutter(cm, e) {
     if (!hasHandler(cm, "gutterContextMenu")) return false;
-    return gutterEvent(cm, e, "gutterContextMenu", false);
+    return gutterEvent(cm, e, "gutterContextMenu", false, signal);
   }
 
   // UPDATING
@@ -7140,7 +7125,7 @@ require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof requ
               spanEndStyle = "";
             }
             if (m.className) spanStyle += " " + m.className;
-            if (m.css) css = (css ? css + ";" : "") + m.css;
+            if (m.css) css = m.css;
             if (m.startStyle && sp.from == pos) spanStartStyle += " " + m.startStyle;
             if (m.endStyle && sp.to == nextChange) spanEndStyle += " " + m.endStyle;
             if (m.title && !title) title = m.title;
@@ -7409,7 +7394,6 @@ require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof requ
     this.id = ++nextDocId;
     this.modeOption = mode;
     this.lineSep = lineSep;
-    this.extend = false;
 
     if (typeof text == "string") text = this.splitLines(text);
     updateDoc(this, {from: start, to: start, text: text});
@@ -8917,7 +8901,7 @@ require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof requ
 
   // THE END
 
-  CodeMirror.version = "5.9.0";
+  CodeMirror.version = "5.8.0";
 
   return CodeMirror;
 });
@@ -8928,7 +8912,6 @@ require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof requ
 var CM = require('codemirror');
 var React = require('react');
 var className = require('classnames');
-
 var CodeMirror = React.createClass({
 	displayName: 'CodeMirror',
 
@@ -8946,7 +8929,6 @@ var CodeMirror = React.createClass({
 			isFocused: false
 		};
 	},
-
 	componentDidMount: function componentDidMount() {
 		var textareaNode = this.refs.textarea;
 		this.codeMirror = CM.fromTextArea(textareaNode, this.props.options);
@@ -8956,7 +8938,6 @@ var CodeMirror = React.createClass({
 		this._currentCodemirrorValue = this.props.defaultValue || this.props.value || '';
 		this.codeMirror.setValue(this._currentCodemirrorValue);
 	},
-
 	componentWillUnmount: function componentWillUnmount() {
 		// todo: is there a lighter-weight way to remove the cm instance?
 		if (this.codeMirror) {
