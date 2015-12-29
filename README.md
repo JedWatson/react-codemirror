@@ -56,6 +56,13 @@ var App = React.createClass({
 React.render(<App />, document.getElementById('app'));
 ```
 
+### Methods
+
+* `focus` focuses the CodeMirror instance
+* `getCodeMirror` returns the CodeMirror instance, available .
+
+You can interact with the CodeMirror instance using a `ref` and the `getCodeMirror()` method after the `componentDidMount` lifecycle event has fired (including inside the `componentDidMount` event in a parent Component).
+
 ### Properties
 
 * `autoSave` `Boolean` automatically persist changes to underlying textarea (default false)
