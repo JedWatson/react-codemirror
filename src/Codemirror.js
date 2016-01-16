@@ -58,7 +58,7 @@ const CodeMirror = React.createClass({
 	},
 	focusChanged (focused) {
 		this.setState({
-			isFocused: focused
+			isFocused: focused,
 		});
 		this.props.onFocusChange && this.props.onFocusChange(focused);
 	},
@@ -75,7 +75,7 @@ const CodeMirror = React.createClass({
 		);
 		return (
 			<div className={editorClassName}>
-				<textarea ref="textarea" name={this.props.path} defaultValue={''} autoComplete="off" />
+				<textarea ref="textarea" name={this.props.path} defaultValue={this.props.value} autoComplete="off" />
 			</div>
 		);
 	},
