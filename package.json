@@ -14,7 +14,7 @@
     "url": "https://github.com/JedWatson/react-codemirror/issues"
   },
   "dependencies": {
-    "classnames": "^2.2.1",
+    "classnames": "^2.2.3",
     "codemirror": "^5.10.0"
   },
   "devDependencies": {
