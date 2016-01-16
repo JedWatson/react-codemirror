@@ -9016,7 +9016,7 @@ var CodeMirror = React.createClass({
 		return React.createElement(
 			'div',
 			{ className: editorClassName },
-			React.createElement('textarea', { ref: 'textarea', name: this.props.path, defaultValue: '', autoComplete: 'off' })
+			React.createElement('textarea', { ref: 'textarea', name: this.props.path, defaultValue: this.props.value, autoComplete: 'off' })
 		);
 	}
 });
