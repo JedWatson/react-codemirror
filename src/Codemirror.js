@@ -1,4 +1,7 @@
-var CM = require('codemirror');
+if (typeof navigator !== 'undefined') {
+  var CM = require('codemirror');
+}
+
 var React = require('react');
 var className = require('classnames');
 var CodeMirror = React.createClass({
