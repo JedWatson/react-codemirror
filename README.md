@@ -99,4 +99,4 @@ See the [example source](https://github.com/JedWatson/react-codemirror/blob/mast
 
 ### License
 
-MIT. Copyright (c) 2015 Jed Watson.
+MIT. Copyright (c) 2016 Jed Watson.
