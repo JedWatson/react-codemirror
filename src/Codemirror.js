@@ -1,9 +1,3 @@
-let CM;
-
-if (typeof navigator !== 'undefined') {
-	CM = require('codemirror');
-}
-
 const React = require('react');
 const className = require('classnames');
 
@@ -14,16 +8,21 @@ const CodeMirror = React.createClass({
 		options: React.PropTypes.object,
 		path: React.PropTypes.string,
 		value: React.PropTypes.string,
-		className: React.PropTypes.any,
+	        className: React.PropTypes.any,
+	        codeMirrorInstance: React.PropTypes.object
 	},
+        getCodeMirrorInstance() {
+                return this.props.codeMirrorInstance || require('codemirror');
+        }
 	getInitialState () {
 		return {
 			isFocused: false,
 		};
 	},
 	componentDidMount () {
-		const textareaNode = this.refs.textarea;
-		this.codeMirror = CM.fromTextArea(textareaNode, this.props.options);
+	        const textareaNode = this.refs.textarea;
+		const codeMirrorInstance = this.getCodeMirrorInstance();
+		this.codeMirror = codeMirrorInstance.fromTextArea(textareaNode, this.props.options);
 		this.codeMirror.on('change', this.codemirrorValueChanged);
 		this.codeMirror.on('focus', this.focusChanged.bind(this, true));
 		this.codeMirror.on('blur', this.focusChanged.bind(this, false));
