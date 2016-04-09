@@ -1,6 +1,6 @@
 const React = require('react');
 const className = require('classnames');
-const _ = require('underscore');
+const debounce = require('lodash.debounce');
 
 const CodeMirror = React.createClass({
 	propTypes: {
@@ -35,7 +35,7 @@ const CodeMirror = React.createClass({
 			this.codeMirror.toTextArea();
 		}
 	},
-	componentWillReceiveProps = _.debounce(function(nextProps) {
+	componentWillReceiveProps: debounce(function (nextProps) {
 		if (this.codeMirror && nextProps.value !== undefined && this.codeMirror.getValue() != nextProps.value) {
 			this.codeMirror.setValue(nextProps.value);
 		}

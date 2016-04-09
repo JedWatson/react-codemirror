@@ -16,7 +16,7 @@
   "dependencies": {
     "classnames": "^2.2.3",
     "codemirror": "^5.10.0",
-    "underscore": "^1.8.3"
+    "lodash.debounce": "^4.0.4"
   },
   "devDependencies": {
     "gulp": "^3.9.0",
