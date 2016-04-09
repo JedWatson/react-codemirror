@@ -9,19 +9,19 @@ const CodeMirror = React.createClass({
 		options: React.PropTypes.object,
 		path: React.PropTypes.string,
 		value: React.PropTypes.string,
-	        className: React.PropTypes.any,
-	        codeMirrorInstance: React.PropTypes.object
+		className: React.PropTypes.any,
+		codeMirrorInstance: React.PropTypes.object,
 	},
-        getCodeMirrorInstance() {
-                return this.props.codeMirrorInstance || require('codemirror');
-        }
+	getCodeMirrorInstance() {
+		return this.props.codeMirrorInstance || require('codemirror');
+	},
 	getInitialState () {
 		return {
 			isFocused: false,
 		};
 	},
 	componentDidMount () {
-	        const textareaNode = this.refs.textarea;
+		const textareaNode = this.refs.textarea;
 		const codeMirrorInstance = this.getCodeMirrorInstance();
 		this.codeMirror = codeMirrorInstance.fromTextArea(textareaNode, this.props.options);
 		this.codeMirror.on('change', this.codemirrorValueChanged);
@@ -30,7 +30,7 @@ const CodeMirror = React.createClass({
 		this.codeMirror.setValue(this.props.defaultValue || this.props.value || '');
 	},
 	componentWillUnmount () {
-		// todo: is there a lighter-weight way to remove the cm instance?
+		// is there a lighter-weight way to remove the cm instance?
 		if (this.codeMirror) {
 			this.codeMirror.toTextArea();
 		}
