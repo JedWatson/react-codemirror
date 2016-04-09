@@ -1,5 +1,6 @@
 const React = require('react');
 const className = require('classnames');
+const _ = require('underscore');
 
 const CodeMirror = React.createClass({
 	propTypes: {
@@ -26,8 +27,7 @@ const CodeMirror = React.createClass({
 		this.codeMirror.on('change', this.codemirrorValueChanged);
 		this.codeMirror.on('focus', this.focusChanged.bind(this, true));
 		this.codeMirror.on('blur', this.focusChanged.bind(this, false));
-		this._currentCodemirrorValue = this.props.defaultValue || this.props.value || '';
-		this.codeMirror.setValue(this._currentCodemirrorValue);
+		this.codeMirror.setValue(this.props.defaultValue || this.props.value || '');
 	},
 	componentWillUnmount () {
 		// todo: is there a lighter-weight way to remove the cm instance?
@@ -35,8 +35,8 @@ const CodeMirror = React.createClass({
 			this.codeMirror.toTextArea();
 		}
 	},
-	componentWillReceiveProps (nextProps) {
-		if (this.codeMirror && nextProps.value !== undefined && this._currentCodemirrorValue !== nextProps.value) {
+	componentWillReceiveProps = _.debounce(function(nextProps) {
+		if (this.codeMirror && nextProps.value !== undefined && this.codeMirror.getValue() != nextProps.value) {
 			this.codeMirror.setValue(nextProps.value);
 		}
 		if (typeof nextProps.options === 'object') {
@@ -46,7 +46,7 @@ const CodeMirror = React.createClass({
 				}
 			}
 		}
-	},
+	}, 0),
 	getCodeMirror () {
 		return this.codeMirror;
 	},
@@ -62,9 +62,9 @@ const CodeMirror = React.createClass({
 		this.props.onFocusChange && this.props.onFocusChange(focused);
 	},
 	codemirrorValueChanged (doc, change) {
-		const newValue = doc.getValue();
-		this._currentCodemirrorValue = newValue;
-		this.props.onChange && this.props.onChange(newValue);
+		if (this.props.onChange && change.origin != 'setValue') {
+			this.props.onChange(doc.getValue());
+		}
 	},
 	render () {
 		const editorClassName = className(
