@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "classnames": "^2.2.3",
-    "codemirror": "^5.10.0",
+    "codemirror": "^5.13.4",
     "lodash.debounce": "^4.0.4"
   },
   "devDependencies": {
