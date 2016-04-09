@@ -20,12 +20,12 @@
   "devDependencies": {
     "gulp": "^3.9.0",
     "happiness": "^1.0.7",
-    "react": "^0.14.0",
-    "react-dom": "^0.14.0",
+    "react": "^15.0.0",
+    "react-dom": "^15.0.0",
     "react-component-gulp-tasks": "^0.7.7"
   },
   "peerDependencies": {
-    "react": "^0.14.0"
+    "react": "^0.14.0 || ^15.0.0"
   },
   "browserify-shim": {
     "react": "global:React"
