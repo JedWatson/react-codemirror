@@ -13,7 +13,7 @@ const CodeMirror = React.createClass({
 		className: React.PropTypes.any,
 		codeMirrorInstance: React.PropTypes.object,
 	},
-	getCodeMirrorInstance() {
+	getCodeMirrorInstance () {
 		return this.props.codeMirrorInstance || require('codemirror');
 	},
 	getInitialState () {
@@ -63,7 +63,7 @@ const CodeMirror = React.createClass({
 		});
 		this.props.onFocusChange && this.props.onFocusChange(focused);
 	},
-	scrollChanged(cm) {
+	scrollChanged (cm) {
 		this.props.onScroll && this.props.onScroll(cm.getScrollInfo());
 	},
 	codemirrorValueChanged (doc, change) {
