@@ -30,7 +30,7 @@ npm install react-codemirror --save
 
 ## Usage
 
-```
+```javascript
 var React = require('react');
 var Codemirror = require('react-codemirror');
 
