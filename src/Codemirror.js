@@ -11,7 +11,7 @@ const CodeMirror = React.createClass({
 		path: React.PropTypes.string,
 		value: React.PropTypes.string,
 		className: React.PropTypes.any,
-		codeMirrorInstance: React.PropTypes.object,
+		codeMirrorInstance: React.PropTypes.func,
 	},
 	getCodeMirrorInstance () {
 		return this.props.codeMirrorInstance || require('codemirror');
