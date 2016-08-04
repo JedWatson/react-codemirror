@@ -75,9 +75,9 @@ See the [CodeMirror API Docs](https://codemirror.net/doc/manual.html#api) for th
 
 ### Using Language Modes
 
-Several [language modes](https://codemirror.net/mode/) are included with CodeMirror for syntax hilighting.
+Several [language modes](https://codemirror.net/mode/) are included with CodeMirror for syntax highlighting.
 
-By default (to optimise bundle size) all modes are not included. To enable syntax hilighting:
+By default (to optimise bundle size) all modes are not included. To enable syntax highlighting:
 
 * install the `codemirror` package dependency (in addition to `react-codemirror`)
 * require the language modes you wish to make available _after_ you require `react-codemirror` itself
@@ -95,7 +95,7 @@ require('codemirror/mode/markdown/markdown');
 }} />
 ```
 
-See the [example source](https://github.com/JedWatson/react-codemirror/blob/master/example/src/example.js) for a reference implementation including JavaScript and markdown syntax hilighting.
+See the [example source](https://github.com/JedWatson/react-codemirror/blob/master/example/src/example.js) for a reference implementation including JavaScript and markdown syntax highlighting.
 
 ### License
 
