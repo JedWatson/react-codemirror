@@ -22,14 +22,26 @@ const CodeMirror = React.createClass({
 		};
 	},
 	componentDidMount () {
-		const textareaNode = this.refs.textarea;
+		const textareaNode = this.textarea;
 		const codeMirrorInstance = this.getCodeMirrorInstance();
-		this.codeMirror = codeMirrorInstance.fromTextArea(textareaNode, this.props.options);
+		this.codeMirror = codeMirrorInstance.fromTextArea(textareaNode.value, this.props.options);
 		this.codeMirror.on('change', this.codemirrorValueChanged);
 		this.codeMirror.on('focus', this.focusChanged.bind(this, true));
 		this.codeMirror.on('blur', this.focusChanged.bind(this, false));
 		this.codeMirror.on('scroll', this.scrollChanged);
 		this.codeMirror.setValue(this.props.defaultValue || this.props.value || '');
+    this.updateProps = debounce(function (nextProps) {
+      if (this.codeMirror && nextProps.value !== undefined && this.codeMirror.getValue() != nextProps.value) {
+        this.codeMirror.setValue(nextProps.value);
+      }
+      if (typeof nextProps.options === 'object') {
+        for (let optionName in nextProps.options) {
+          if (nextProps.options.hasOwnProperty(optionName)) {
+            this.codeMirror.setOption(optionName, nextProps.options[optionName]);
+          }
+        }
+      }
+    }, 0);
 	},
 	componentWillUnmount () {
 		// is there a lighter-weight way to remove the cm instance?
@@ -37,18 +49,9 @@ const CodeMirror = React.createClass({
 			this.codeMirror.toTextArea();
 		}
 	},
-	componentWillReceiveProps: debounce(function (nextProps) {
-		if (this.codeMirror && nextProps.value !== undefined && this.codeMirror.getValue() != nextProps.value) {
-			this.codeMirror.setValue(nextProps.value);
-		}
-		if (typeof nextProps.options === 'object') {
-			for (let optionName in nextProps.options) {
-				if (nextProps.options.hasOwnProperty(optionName)) {
-					this.codeMirror.setOption(optionName, nextProps.options[optionName]);
-				}
-			}
-		}
-	}, 0),
+	componentWillReceiveProps: function (nextProps) {
+    this.updateProps(nextProps);
+	},
 	getCodeMirror () {
 		return this.codeMirror;
 	},
@@ -79,7 +82,7 @@ const CodeMirror = React.createClass({
 		);
 		return (
 			<div className={editorClassName}>
-				<textarea ref="textarea" name={this.props.path} defaultValue={this.props.value} autoComplete="off" />
+        <textarea ref={(node) => this.textarea = node} name={this.props.path} defaultValue={this.props.value} autoComplete="off" />
 			</div>
 		);
 	},
