@@ -11,6 +11,7 @@ const CodeMirror = React.createClass({
 		path: React.PropTypes.string,
 		value: React.PropTypes.string,
 		className: React.PropTypes.any,
+		style: React.PropTypes.object,
 		codeMirrorInstance: React.PropTypes.func,
 	},
 	getCodeMirrorInstance () {
@@ -78,7 +79,7 @@ const CodeMirror = React.createClass({
 			this.props.className
 		);
 		return (
-			<div className={editorClassName}>
+			<div className={editorClassName} style={this.props.style}>
 				<textarea ref="textarea" name={this.props.path} defaultValue={this.props.value} autoComplete="off" />
 			</div>
 		);
