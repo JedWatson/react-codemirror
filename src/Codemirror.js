@@ -2,6 +2,11 @@ const React = require('react');
 const className = require('classnames');
 const debounce = require('lodash.debounce');
 
+function normalizeLineEndings(str) {
+	if (!str) return str;
+	return str.replace(/\r\n|\r/g, '\n');
+}
+
 const CodeMirror = React.createClass({
 	propTypes: {
 		onChange: React.PropTypes.func,
@@ -38,8 +43,10 @@ const CodeMirror = React.createClass({
 		}
 	},
 	componentWillReceiveProps: debounce(function (nextProps) {
-		if (this.codeMirror && nextProps.value !== undefined && this.codeMirror.getValue() != nextProps.value) {
-			this.codeMirror.setValue(nextProps.value);
+		if (this.codeMirror && nextProps.value !== undefined) {
+			if (normalizeLineEndings(this.codeMirror.getValue()) != normalizeLineEndings(nextProps.value)) {
+				this.codeMirror.setValue(nextProps.value);
+			}
 		}
 		if (typeof nextProps.options === 'object') {
 			for (let optionName in nextProps.options) {
