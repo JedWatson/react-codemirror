@@ -22,7 +22,7 @@ const CodeMirror = React.createClass({
 			isFocused: false,
 		};
 	},
-  componentWillUnmount() {
+  componentWillMount() {
     this.handleUpdate = debounce((nextProps) => {
       if (this.codeMirror && nextProps.value !== undefined && this.codeMirror.getValue() != nextProps.value) {
         this.codeMirror.setValue(nextProps.value);

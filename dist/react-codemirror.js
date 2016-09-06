@@ -9422,7 +9422,7 @@ var CodeMirror = React.createClass({
 			isFocused: false
 		};
 	},
-	componentWillUnmount: function componentWillUnmount() {
+	componentWillMount: function componentWillMount() {
 		var _this = this;
 
 		this.handleUpdate = debounce(function (nextProps) {
