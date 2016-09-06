@@ -34,7 +34,7 @@ const CodeMirror = React.createClass({
           }
         }
       }
-    }, debounceWaitTime || 0);
+    }, this.props.debounceWaitTime || 0);
   },
 	componentDidMount () {
 		const textareaNode = this.refs.textarea;

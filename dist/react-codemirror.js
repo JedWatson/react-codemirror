@@ -9436,7 +9436,7 @@ var CodeMirror = React.createClass({
 					}
 				}
 			}
-		}, debounceWaitTime || 0);
+		}, this.props.debounceWaitTime || 0);
 	},
 	componentDidMount: function componentDidMount() {
 		var textareaNode = this.refs.textarea;
