@@ -1,5 +1,6 @@
 const React = require('react');
 const className = require('classnames');
+const debounce = require('lodash.debounce');
 
 const CodeMirror = React.createClass({
 	propTypes: {
@@ -11,6 +12,7 @@ const CodeMirror = React.createClass({
 		value: React.PropTypes.string,
 		className: React.PropTypes.any,
 		codeMirrorInstance: React.PropTypes.func,
+    debounceWaitTime: React.PropTypes.number,
 	},
 	getCodeMirrorInstance () {
 		return this.props.codeMirrorInstance || require('codemirror');
@@ -20,6 +22,20 @@ const CodeMirror = React.createClass({
 			isFocused: false,
 		};
 	},
+  componentWillUnmount() {
+    this.handleUpdate = debounce((nextProps) => {
+      if (this.codeMirror && nextProps.value !== undefined && this.codeMirror.getValue() != nextProps.value) {
+        this.codeMirror.setValue(nextProps.value);
+      }
+      if (typeof nextProps.options === 'object') {
+        for (let optionName in nextProps.options) {
+          if (nextProps.options.hasOwnProperty(optionName)) {
+            this.codeMirror.setOption(optionName, nextProps.options[optionName]);
+          }
+        }
+      }
+    }, debounceWaitTime || 0);
+  }
 	componentDidMount () {
 		const textareaNode = this.refs.textarea;
 		const codeMirrorInstance = this.getCodeMirrorInstance();
@@ -36,17 +52,8 @@ const CodeMirror = React.createClass({
 			this.codeMirror.toTextArea();
 		}
 	},
-  componentWillReceiveProps: function (nextProps) {
-    if (this.codeMirror && nextProps.value !== undefined && this.codeMirror.getValue() != nextProps.value) {
-      this.codeMirror.setValue(nextProps.value);
-    }
-    if (typeof nextProps.options === 'object') {
-      for (let optionName in nextProps.options) {
-        if (nextProps.options.hasOwnProperty(optionName)) {
-          this.codeMirror.setOption(optionName, nextProps.options[optionName]);
-        }
-      }
-    }
+  componentWillReceiveProps (nextProps) {
+    this.handleUpdate(nextProps);
   },
 	getCodeMirror () {
 		return this.codeMirror;
