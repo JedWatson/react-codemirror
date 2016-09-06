@@ -1,6 +1,5 @@
 const React = require('react');
 const className = require('classnames');
-const debounce = require('lodash.debounce');
 
 const CodeMirror = React.createClass({
 	propTypes: {
@@ -37,18 +36,18 @@ const CodeMirror = React.createClass({
 			this.codeMirror.toTextArea();
 		}
 	},
-	componentWillReceiveProps: debounce(function (nextProps) {
-		if (this.codeMirror && nextProps.value !== undefined && this.codeMirror.getValue() != nextProps.value) {
-			this.codeMirror.setValue(nextProps.value);
-		}
-		if (typeof nextProps.options === 'object') {
-			for (let optionName in nextProps.options) {
-				if (nextProps.options.hasOwnProperty(optionName)) {
-					this.codeMirror.setOption(optionName, nextProps.options[optionName]);
-				}
-			}
-		}
-	}, 0),
+  componentWillReceiveProps: function (nextProps) {
+    if (this.codeMirror && nextProps.value !== undefined && this.codeMirror.getValue() != nextProps.value) {
+      this.codeMirror.setValue(nextProps.value);
+    }
+    if (typeof nextProps.options === 'object') {
+      for (let optionName in nextProps.options) {
+        if (nextProps.options.hasOwnProperty(optionName)) {
+          this.codeMirror.setOption(optionName, nextProps.options[optionName]);
+        }
+      }
+    }
+  },
 	getCodeMirror () {
 		return this.codeMirror;
 	},
