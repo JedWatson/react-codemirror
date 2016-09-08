@@ -23,10 +23,14 @@
     "happiness": "^1.0.7",
     "react": "^15.0.0",
     "react-dom": "^15.0.0",
-    "react-component-gulp-tasks": "^0.7.7"
+    "react-component-gulp-tasks": "^0.7.7",
+    "react-dom-polyfill": "^1.0.0-beta.0"
   },
   "peerDependencies": {
-    "react": "^0.14.0 || ^15.0.0"
+    "react": ">=0.12 <16"
+  },
+  "optionalDependencies": {
+    "react-dom": "<16"
   },
   "browserify-shim": {
     "react": "global:React"
