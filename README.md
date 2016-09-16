@@ -65,11 +65,14 @@ You can interact with the CodeMirror instance using a `ref` and the `getCodeMirr
 
 ### Properties
 
-* `autoSave` `Boolean` automatically persist changes to underlying textarea (default false)
-* `value` `String` the editor value
-* `options` `Object (newValue)` options passed to the CodeMirror instance
-* `onChange` `Function (newValue)` called when a change is made
-* `onFocusChange` `Function (focused)` called when the editor is focused or loses focus
+| Name | Type | Description |
+|------|------|-------------|
+| `autoSave` | `Boolean` | Automatically persist changes to underlying textarea (default false) |
+| `value` | `String` | The editor value |
+| `options` | `Object (newValue)` | Options passed to the CodeMirror instance |
+| `onChange` | `Function (newValue)` | Called when a change is made |
+| `onFocusChange` | `Function (focused)` | Called when the editor is focused or loses focus |
+| `onScroll` | `Function (scrollInfo)` | Called when the editor is scrolled with a [scrollInfo](https://codemirror.net/doc/manual.html#getScrollInfo) object |
 
 See the [CodeMirror API Docs](https://codemirror.net/doc/manual.html#api) for the available options.
 
