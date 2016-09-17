@@ -6,14 +6,15 @@ const debounce = require('lodash.debounce');
 
 const CodeMirror = React.createClass({
 	propTypes: {
+		className: React.PropTypes.any,
+		codeMirrorInstance: React.PropTypes.func,
+		defaultValue: React.PropTypes.string,
 		onChange: React.PropTypes.func,
 		onFocusChange: React.PropTypes.func,
 		onScroll: React.PropTypes.func,
 		options: React.PropTypes.object,
 		path: React.PropTypes.string,
 		value: React.PropTypes.string,
-		className: React.PropTypes.any,
-		codeMirrorInstance: React.PropTypes.func,
 	},
 	getCodeMirrorInstance () {
 		return this.props.codeMirrorInstance || require('codemirror');
