@@ -40,7 +40,7 @@ const CodeMirror = React.createClass({
 		}
 	},
 	componentWillReceiveProps: debounce(function (nextProps) {
-		if (this.codeMirror && nextProps.value !== undefined && this.codeMirror.getValue() != nextProps.value) {
+		if (this.codeMirror && nextProps.value !== undefined && this.codeMirror.getValue() !== nextProps.value) {
 			this.codeMirror.setValue(nextProps.value);
 		}
 		if (typeof nextProps.options === 'object') {
@@ -69,7 +69,7 @@ const CodeMirror = React.createClass({
 		this.props.onScroll && this.props.onScroll(cm.getScrollInfo());
 	},
 	codemirrorValueChanged (doc, change) {
-		if (this.props.onChange && change.origin != 'setValue') {
+		if (this.props.onChange && change.origin !== 'setValue') {
 			this.props.onChange(doc.getValue());
 		}
 	},

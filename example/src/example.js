@@ -36,7 +36,7 @@ var App = React.createClass({
 			readOnly: !this.state.readOnly
 		}, () => this.refs.editor.focus());
 	},
-	interact(cm){
+	interact (cm) {
 		console.log(cm.getValue());
 	},
 	render () {
@@ -47,7 +47,7 @@ var App = React.createClass({
 		};
 		return (
 			<div>
-				<Codemirror ref="editor" value={this.state.code} onChange={this.updateCode} options={options} interact={this.interact}/>
+				<Codemirror ref="editor" value={this.state.code} onChange={this.updateCode} options={options} interact={this.interact} />
 				<div style={{ marginTop: 10 }}>
 					<select onChange={this.changeMode} value={this.state.mode}>
 						<option value="markdown">Markdown</option>
