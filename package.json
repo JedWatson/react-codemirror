@@ -14,17 +14,17 @@
     "url": "https://github.com/JedWatson/react-codemirror/issues"
   },
   "dependencies": {
-    "classnames": "^2.2.3",
-    "codemirror": "^5.13.4",
-    "lodash.debounce": "^4.0.4"
+    "classnames": "^2.2.5",
+    "codemirror": "^5.18.2",
+    "lodash.debounce": "^4.0.8"
   },
   "devDependencies": {
-    "gulp": "^3.9.0",
-    "happiness": "^1.0.7",
-    "react": "^15.0.0",
-    "react-dom": "^15.0.0",
+    "gulp": "^3.9.1",
+    "happiness": "^7.1.2",
+    "react": "^15.3.1",
+    "react-dom": "^15.3.1",
     "react-component-gulp-tasks": "^0.7.7",
-    "react-dom-polyfill": "^1.0.0-beta.0"
+    "react-dom-polyfill": "^1.0.0-beta.2"
   },
   "peerDependencies": {
     "react": ">=0.12 <16"
