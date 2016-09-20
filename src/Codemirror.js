@@ -33,6 +33,18 @@ const CodeMirror = React.createClass({
 		this.codeMirror.on('blur', this.focusChanged.bind(this, false));
 		this.codeMirror.on('scroll', this.scrollChanged);
 		this.codeMirror.setValue(this.props.defaultValue || this.props.value || '');
+    this.handleUpdate = debounce(function(nextProps) {
+      if (this.codeMirror && nextProps.value !== undefined && this.codeMirror.getValue() !== nextProps.value) {
+        this.codeMirror.setValue(nextProps.value);
+      }
+      if (typeof nextProps.options === 'object') {
+        for (let optionName in nextProps.options) {
+          if (nextProps.options.hasOwnProperty(optionName)) {
+            this.codeMirror.setOption(optionName, nextProps.options[optionName]);
+          }
+        }
+      }
+    }, 0);
 	},
 	componentWillUnmount () {
 		// is there a lighter-weight way to remove the cm instance?
@@ -40,6 +52,11 @@ const CodeMirror = React.createClass({
 			this.codeMirror.toTextArea();
 		}
 	},
+
+  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+    this.handleUpdate(nextProps);
+  },
+
 	componentWillReceiveProps: debounce(function (nextProps) {
 		if (this.codeMirror && nextProps.value !== undefined && this.codeMirror.getValue() !== nextProps.value) {
 			this.codeMirror.setValue(nextProps.value);
