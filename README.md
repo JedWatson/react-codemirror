@@ -30,6 +30,7 @@ npm install react-codemirror --save
 
 ## Usage
 
+Require the Codemirror component render it with JSX:
 ```javascript
 var React = require('react');
 var Codemirror = require('react-codemirror');
@@ -54,6 +55,11 @@ var App = React.createClass({
 });
 
 React.render(<App />, document.getElementById('app'));
+```
+
+Add the Codemirror CSS to your styles (easy to do with a LESS import):
+```less
+@import (inline) "../../node_modules/codemirror/lib/codemirror.css";
 ```
 
 ### Methods
@@ -97,6 +103,6 @@ require('codemirror/mode/markdown/markdown');
 
 See the [example source](https://github.com/JedWatson/react-codemirror/blob/master/example/src/example.js) for a reference implementation including JavaScript and markdown syntax highlighting.
 
-### License
+## License
 
 MIT. Copyright (c) 2016 Jed Watson.
