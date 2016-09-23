@@ -27,6 +27,8 @@ You can also use the standalone build by including `dist/react-codemirror.js` in
 npm install react-codemirror --save
 ```
 
+Ensure that ``codemirror.css`` is loaded. It can be included in your module css as shown in [example.less](example/src/example.less) or linked explicitly in your index.html file e.g ``<link href="css/codemirror.css"  rel="stylesheet">``.
+
 
 ## Usage
 
