@@ -44,6 +44,11 @@ const CodeMirror = React.createClass({
 		if (this.codeMirror && nextProps.value !== undefined && this.codeMirror.getValue() !== nextProps.value) {
 			this.codeMirror.setValue(nextProps.value);
 		}
+		if (this.codeMirror && nextProps.changes !== undefined) {
+			this.codeMirror.replaceRange(nextProps.changes.text,
+				{line: nextProps.changes.from.line, ch: nextProps.changes.from.ch},
+				{line: nextProps.changes.to.line, ch: nextProps.changes.to.ch});
+		}
 		if (typeof nextProps.options === 'object') {
 			for (let optionName in nextProps.options) {
 				if (nextProps.options.hasOwnProperty(optionName)) {
