@@ -14,6 +14,7 @@
     "url": "https://github.com/JedWatson/react-codemirror/issues"
   },
   "dependencies": {
+    "browserify-optional": "^1.0.0",
     "classnames": "^2.2.5",
     "codemirror": "^5.18.2",
     "lodash.debounce": "^4.0.8"
