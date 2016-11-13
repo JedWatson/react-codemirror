@@ -15,6 +15,12 @@ const CodeMirror = React.createClass({
 		options: React.PropTypes.object,
 		path: React.PropTypes.string,
 		value: React.PropTypes.string,
+		preserveScrollPosition: React.PropTypes.bool,
+	},
+	getDefaultProps () {
+		return {
+			preserveScrollPosition: false,
+		};
 	},
 	getCodeMirrorInstance () {
 		return this.props.codeMirrorInstance || require('codemirror');
@@ -45,7 +51,13 @@ const CodeMirror = React.createClass({
 	},
 	componentWillReceiveProps: function (nextProps) {
 		if (this.codeMirror && nextProps.value !== undefined && this.codeMirror.getValue() !== nextProps.value) {
-			this.codeMirror.setValue(nextProps.value);
+			if (this.props.preserveScrollPosition) {
+				var prevScrollPosition = this.codeMirror.getScrollInfo();
+				this.codeMirror.setValue(nextProps.value);
+				this.codeMirror.scrollTo(prevScrollPosition.left, prevScrollPosition.top);
+			} else {
+				this.codeMirror.setValue(nextProps.value);
+			}
 		}
 		if (typeof nextProps.options === 'object') {
 			for (let optionName in nextProps.options) {

@@ -69,6 +69,7 @@ You can interact with the CodeMirror instance using a `ref` and the `getCodeMirr
 
 * `autoSave` `Boolean` automatically persist changes to underlying textarea (default false)
 * `value` `String` the editor value
+* `preserveScrollPosition` `Boolean=false` Preserve previous scroll position after updating value
 * `options` `Object (newValue)` options passed to the CodeMirror instance
 * `onChange` `Function (newValue)` called when a change is made
 * `onFocusChange` `Function (focused)` called when the editor is focused or loses focus
