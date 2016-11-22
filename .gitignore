@@ -29,3 +29,6 @@ example/dist
 *.sublime-*
 .idea/
 *.DS_Store
+
+# Yarn lockfile
+yarn.lock
