@@ -19,6 +19,7 @@
     "lodash.debounce": "^4.0.8"
   },
   "devDependencies": {
+    "browserify-optional": "^1.0.0",
     "gulp": "^3.9.1",
     "happiness": "^7.1.2",
     "react": "^15.3.1",
