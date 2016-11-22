@@ -91,7 +91,7 @@ const CodeMirror = React.createClass({
 	},
 	codemirrorValueChanged (doc, change) {
 		if (this.props.onChange && change.origin !== 'setValue') {
-			this.props.onChange(doc.getValue());
+			this.props.onChange(doc.getValue(), change);
 		}
 	},
 	render () {
