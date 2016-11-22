@@ -1,5 +1,5 @@
 const React = require('react');
-const ReactDOM = require('react-dom-polyfill')(React);
+const ReactDOM = require('react-dom');
 const findDOMNode = ReactDOM.findDOMNode;
 const className = require('classnames');
 const debounce = require('lodash.debounce');
