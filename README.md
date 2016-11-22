@@ -27,36 +27,54 @@ You can also use the standalone build by including `dist/react-codemirror.js` in
 npm install react-codemirror --save
 ```
 
-Ensure that ``codemirror.css`` is loaded. It can be included in your module css as shown in [example.less](example/src/example.less) or linked explicitly in your index.html file e.g ``<link href="css/codemirror.css"  rel="stylesheet">``.
-
 
 ## Usage
 
+Require the CodeMirror component and render it with JSX:
+
 ```javascript
 var React = require('react');
-var Codemirror = require('react-codemirror');
+var CodeMirror = require('react-codemirror');
 
 var App = React.createClass({
 	getInitialState: function() {
 		return {
-			code: "// Code"
+			code: "// Code",
 		};
 	},
 	updateCode: function(newCode) {
 		this.setState({
-			code: newCode
+			code: newCode,
 		});
 	},
 	render: function() {
 		var options = {
-			lineNumbers: true
+			lineNumbers: true,
 		};
-		return <Codemirror value={this.state.code} onChange={this.updateCode} options={options} />
+		return <CodeMirror value={this.state.code} onChange={this.updateCode} options={options} />
 	}
 });
 
 React.render(<App />, document.getElementById('app'));
 ```
+
+### Include the CSS
+
+Ensure that CodeMirror's stylesheet `codemirror.css` is loaded.
+
+If you're using LESS (similar for Sass) you can import the css directly from the codemirror package, as shown in [example.less](example/src/example.less):
+
+```less
+@import (inline) "./node_modules/codemirror/lib/codemirror.css";
+```
+
+If you're using Webpack with the css loader, you can require the codemirror css in your application instead:
+
+```js
+require('codemirror/lib/codemirror.css');
+```
+
+Alternatively, you can explicitly link the `codemirror.css` file from the CodeMirror project in your index.html file, e.g `<link href="css/codemirror.css"  rel="stylesheet">`.
 
 ### Methods
 
@@ -88,13 +106,13 @@ By default (to optimise bundle size) all modes are not included. To enable synta
 
 ```js
 var React = require('react');
-var Codemirror = require('react-codemirror');
+var CodeMirror = require('react-codemirror');
 require('codemirror/mode/javascript/javascript');
 require('codemirror/mode/xml/xml');
 require('codemirror/mode/markdown/markdown');
 
-<Codemirror ... options={{
-	mode: 'javascript'
+<CodeMirror ... options={{
+	mode: 'javascript',
 }} />
 ```
 
