@@ -4,6 +4,11 @@ const findDOMNode = ReactDOM.findDOMNode;
 const className = require('classnames');
 const debounce = require('lodash.debounce');
 
+function normalizeLineEndings (str) {
+	if (!str) return str;
+	return str.replace(/\r\n|\r/g, '\n');
+}
+
 const CodeMirror = React.createClass({
 	propTypes: {
 		className: React.PropTypes.any,
@@ -50,7 +55,7 @@ const CodeMirror = React.createClass({
 		}
 	},
 	componentWillReceiveProps: function (nextProps) {
-		if (this.codeMirror && nextProps.value !== undefined && this.codeMirror.getValue() !== nextProps.value) {
+		if (this.codeMirror && nextProps.value !== undefined && normalizeLineEndings(this.codeMirror.getValue()) !== normalizeLineEndings(nextProps.value)) {
 			if (this.props.preserveScrollPosition) {
 				var prevScrollPosition = this.codeMirror.getScrollInfo();
 				this.codeMirror.setValue(nextProps.value);
