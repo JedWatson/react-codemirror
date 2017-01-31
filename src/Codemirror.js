@@ -1,6 +1,5 @@
 const React = require('react');
 const ReactDOM = require('react-dom');
-const findDOMNode = ReactDOM.findDOMNode;
 const className = require('classnames');
 const debounce = require('lodash.debounce');
 
@@ -39,7 +38,7 @@ const CodeMirror = React.createClass({
 		this.componentWillReceiveProps = debounce(this.componentWillReceiveProps, 0);
 	},
 	componentDidMount () {
-		const textareaNode = findDOMNode(this.refs.textarea);
+		const textareaNode = this._textarea;
 		const codeMirrorInstance = this.getCodeMirrorInstance();
 		this.codeMirror = codeMirrorInstance.fromTextArea(textareaNode, this.props.options);
 		this.codeMirror.on('change', this.codemirrorValueChanged);
@@ -102,7 +101,12 @@ const CodeMirror = React.createClass({
 		);
 		return (
 			<div className={editorClassName}>
-				<textarea ref="textarea" name={this.props.path} defaultValue={this.props.value} autoComplete="off" />
+				<textarea
+					ref={textarea => this._textarea = textarea}
+					name={this.props.path}
+					defaultValue={this.props.value}
+					autoComplete="off"
+				/>
 			</div>
 		);
 	},
