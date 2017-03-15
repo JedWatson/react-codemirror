@@ -9,6 +9,44 @@ function normalizeLineEndings (str) {
 	return str.replace(/\r\n|\r/g, '\n');
 }
 
+function isEqual(thing1, thing2) {
+	if (thing1 === thing2) {
+		return true;
+	} else if (Number.isNaN(thing1) && Number.isNaN(thing2)) {
+		return true;
+	} else if (Array.isArray(thing1) && Array.isArray(thing2)) {
+		return arraysEqual(thing1, thing2);
+	} else if (typeof(thing1) === 'object' && typeof(thing2) === 'object') {
+		return objectsEqual(thing1, thing2);
+	} else {
+		return false;
+	}
+}
+
+function arraysEqual(array1, array2) {
+	if (array1.length !== array2.length) {
+		return false;
+	} else {
+		return array1.every(function(item, index) {
+			return isEqual(array1[index], array2[index]);
+		});
+	}
+}
+
+function objectsEqual(obj1, obj2) {
+	if (obj1.constructor !== obj2.constructor) {
+		return false;
+	}
+	const obj1Keys = Object.keys(obj1);
+	const obj2Keys = Object.keys(obj2);
+	if (!arraysEqual(obj1Keys.sort(), obj2Keys.sort())) {
+		return false;
+	}
+	return obj1Keys.every(function(key) {
+		return isEqual(obj1[key], obj2[key]);
+	});
+}
+
 const CodeMirror = React.createClass({
 	propTypes: {
 		className: React.PropTypes.any,
@@ -67,9 +105,15 @@ const CodeMirror = React.createClass({
 		if (typeof nextProps.options === 'object') {
 			for (let optionName in nextProps.options) {
 				if (nextProps.options.hasOwnProperty(optionName)) {
-					this.codeMirror.setOption(optionName, nextProps.options[optionName]);
+					this.setOptionIfChanged(optionName, nextProps.options[optionName]);
 				}
 			}
+		}
+	},
+	setOptionIfChanged (optionName, newValue) {
+		const oldValue = this.codeMirror.getOption(optionName);
+		if (!isEqual(oldValue, newValue)) {
+			this.codeMirror.setOption(optionName, newValue);
 		}
 	},
 	getCodeMirror () {
