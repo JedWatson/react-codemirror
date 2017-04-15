@@ -16,14 +16,15 @@
   "dependencies": {
     "classnames": "^2.2.5",
     "codemirror": "^5.18.2",
-    "lodash.debounce": "^4.0.8"
+    "lodash.debounce": "^4.0.8",
+    "prop-types": "^15.5.8"
   },
   "devDependencies": {
     "gulp": "^3.9.1",
     "happiness": "^7.1.2",
     "react": "^15.3.1",
-    "react-dom": "^15.3.1",
-    "react-component-gulp-tasks": "^0.7.7"
+    "react-component-gulp-tasks": "^0.7.7",
+    "react-dom": "^15.3.1"
   },
   "peerDependencies": {
     "react": ">=0.14 <16",
