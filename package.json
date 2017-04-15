@@ -16,6 +16,7 @@
   "dependencies": {
     "classnames": "^2.2.5",
     "codemirror": "^5.18.2",
+    "create-react-class": "^15.5.2",
     "lodash.debounce": "^4.0.8",
     "prop-types": "^15.5.8"
   },

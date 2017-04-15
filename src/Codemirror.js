@@ -2,6 +2,7 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 const findDOMNode = ReactDOM.findDOMNode;
 const PropTypes = require('prop-types'); 
+const createReactClass = require('create-react-class');
 const className = require('classnames');
 const debounce = require('lodash.debounce');
 
@@ -10,7 +11,7 @@ function normalizeLineEndings (str) {
 	return str.replace(/\r\n|\r/g, '\n');
 }
 
-const CodeMirror = React.createClass({
+const CodeMirror = createReactClass({
 	propTypes: {
 		className: PropTypes.any,
 		codeMirrorInstance: PropTypes.func,
