@@ -21,6 +21,7 @@ const CodeMirror = React.createClass({
 		path: React.PropTypes.string,
 		value: React.PropTypes.string,
 		preserveScrollPosition: React.PropTypes.bool,
+		autoFocus: React.PropTypes.bool,
 	},
 	getDefaultProps () {
 		return {
@@ -102,7 +103,7 @@ const CodeMirror = React.createClass({
 		);
 		return (
 			<div className={editorClassName}>
-				<textarea ref="textarea" name={this.props.path} defaultValue={this.props.value} autoComplete="off" />
+				<textarea ref="textarea" name={this.props.path} defaultValue={this.props.value} autoComplete="off" autoFocus={this.props.autoFocus} />
 			</div>
 		);
 	},
