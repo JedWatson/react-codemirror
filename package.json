@@ -19,6 +19,7 @@
     "lodash.debounce": "^4.0.8"
   },
   "devDependencies": {
+    "cross-env": "^4.0.0",
     "gulp": "^3.9.1",
     "happiness": "^7.1.2",
     "react": "^15.3.1",
@@ -33,7 +34,7 @@
     "react": "global:React"
   },
   "scripts": {
-    "build": "gulp clean && NODE_ENV=production gulp build",
+    "build": "gulp clean && cross-env NODE_ENV=production gulp build",
     "bump": "gulp bump",
     "bump:minor": "gulp bump:minor",
     "bump:major": "gulp bump:major",
