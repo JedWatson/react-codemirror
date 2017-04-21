@@ -16,6 +16,7 @@ const CodeMirror = React.createClass({
 		defaultValue: React.PropTypes.string,
 		onChange: React.PropTypes.func,
 		onFocusChange: React.PropTypes.func,
+		onCursorActivity: React.PropTypes.func,
 		onScroll: React.PropTypes.func,
 		options: React.PropTypes.object,
 		path: React.PropTypes.string,
@@ -46,6 +47,7 @@ const CodeMirror = React.createClass({
 		this.codeMirror.on('focus', this.focusChanged.bind(this, true));
 		this.codeMirror.on('blur', this.focusChanged.bind(this, false));
 		this.codeMirror.on('scroll', this.scrollChanged);
+		this.codeMirror.on('cursorActivity', this.cursorActivity);
 		this.codeMirror.setValue(this.props.defaultValue || this.props.value || '');
 	},
 	componentWillUnmount () {
@@ -88,6 +90,9 @@ const CodeMirror = React.createClass({
 	},
 	scrollChanged (cm) {
 		this.props.onScroll && this.props.onScroll(cm.getScrollInfo());
+	},
+	cursorActivity (cm) {
+		this.props.onCursorActivity && this.props.onCursorActivity(cm);
 	},
 	codemirrorValueChanged (doc, change) {
 		if (this.props.onChange && change.origin !== 'setValue') {
