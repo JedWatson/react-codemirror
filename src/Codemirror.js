@@ -55,7 +55,7 @@ const CodeMirror = React.createClass({
 		}
 	},
 	componentWillReceiveProps: function (nextProps) {
-		if (this.codeMirror && nextProps.value !== undefined && normalizeLineEndings(this.codeMirror.getValue()) !== normalizeLineEndings(nextProps.value)) {
+		if (this.codeMirror && nextProps.value !== undefined && nextProps.value !== this.props.value && normalizeLineEndings(this.codeMirror.getValue()) !== normalizeLineEndings(nextProps.value)) {
 			if (this.props.preserveScrollPosition) {
 				var prevScrollPosition = this.codeMirror.getScrollInfo();
 				this.codeMirror.setValue(nextProps.value);
