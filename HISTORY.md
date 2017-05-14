@@ -1,6 +1,6 @@
 # React-CodeMirror
 
-## Unreleased
+## v1.0.0 / 2017-05-14
 
 * changed; `path` prop has been changed to `name`
 * changed; Updates peerDependency for `react` and `react-dom` to `">=15.5 <16"`
