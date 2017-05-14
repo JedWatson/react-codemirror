@@ -18,6 +18,7 @@ const CodeMirror = createReactClass({
 		codeMirrorInstance: PropTypes.func,
 		defaultValue: PropTypes.string,
 		onChange: PropTypes.func,
+		onCursorActivity: PropTypes.func,
 		onFocusChange: PropTypes.func,
 		onScroll: PropTypes.func,
 		options: PropTypes.object,
@@ -46,6 +47,7 @@ const CodeMirror = createReactClass({
 		const codeMirrorInstance = this.getCodeMirrorInstance();
 		this.codeMirror = codeMirrorInstance.fromTextArea(textareaNode, this.props.options);
 		this.codeMirror.on('change', this.codemirrorValueChanged);
+		this.codeMirror.on('cursorActivity', this.cursorActivity);
 		this.codeMirror.on('focus', this.focusChanged.bind(this, true));
 		this.codeMirror.on('blur', this.focusChanged.bind(this, false));
 		this.codeMirror.on('scroll', this.scrollChanged);
@@ -94,6 +96,9 @@ const CodeMirror = createReactClass({
 			isFocused: focused,
 		});
 		this.props.onFocusChange && this.props.onFocusChange(focused);
+	},
+	cursorActivity (cm) {
+		this.props.onCursorActivity && this.props.onCursorActivity(cm);
 	},
 	scrollChanged (cm) {
 		this.props.onScroll && this.props.onScroll(cm.getScrollInfo());
