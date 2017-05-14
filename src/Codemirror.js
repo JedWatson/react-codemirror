@@ -14,6 +14,7 @@ function normalizeLineEndings (str) {
 
 const CodeMirror = createReactClass({
 	propTypes: {
+		autoFocus: PropTypes.bool,
 		className: PropTypes.any,
 		codeMirrorInstance: PropTypes.func,
 		defaultValue: PropTypes.string,
@@ -116,7 +117,13 @@ const CodeMirror = createReactClass({
 		);
 		return (
 			<div className={editorClassName}>
-				<textarea ref="textarea" name={this.props.path} defaultValue={this.props.value} autoComplete="off" />
+				<textarea
+					ref="textarea"
+					name={this.props.path}
+					defaultValue={this.props.value}
+					autoComplete="off"
+					autoFocus={this.props.autoFocus}
+				/>
 			</div>
 		);
 	},
