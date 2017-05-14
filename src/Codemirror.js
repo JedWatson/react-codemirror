@@ -4,6 +4,7 @@ const findDOMNode = ReactDOM.findDOMNode;
 const PropTypes = require('prop-types');
 const className = require('classnames');
 const debounce = require('lodash.debounce');
+const isEqual = require('lodash.isequal');
 const createReactClass = require('create-react-class');
 
 function normalizeLineEndings (str) {
@@ -69,11 +70,17 @@ const CodeMirror = createReactClass({
 		if (typeof nextProps.options === 'object') {
 			for (let optionName in nextProps.options) {
 				if (nextProps.options.hasOwnProperty(optionName)) {
-					this.codeMirror.setOption(optionName, nextProps.options[optionName]);
+					this.setOptionIfChanged(optionName, nextProps.options[optionName]);
 				}
 			}
 		}
 	},
+	setOptionIfChanged (optionName, newValue) {
+ 		const oldValue = this.codeMirror.getOption(optionName);
+ 		if (!isEqual(oldValue, newValue)) {
+ 			this.codeMirror.setOption(optionName, newValue);
+ 		}
+ 	},
 	getCodeMirror () {
 		return this.codeMirror;
 	},
