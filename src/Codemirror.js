@@ -17,6 +17,7 @@ const CodeMirror = createReactClass({
 		className: PropTypes.any,
 		codeMirrorInstance: PropTypes.func,
 		defaultValue: PropTypes.string,
+		name: PropTypes.string,
 		onChange: PropTypes.func,
 		onCursorActivity: PropTypes.func,
 		onFocusChange: PropTypes.func,
@@ -41,6 +42,9 @@ const CodeMirror = createReactClass({
 	},
 	componentWillMount () {
 		this.componentWillReceiveProps = debounce(this.componentWillReceiveProps, 0);
+		if (this.props.path) {
+			console.error('Warning: react-codemirror: the `path` prop has been changed to `name`');
+		}
 	},
 	componentDidMount () {
 		const codeMirrorInstance = this.getCodeMirrorInstance();
@@ -117,7 +121,7 @@ const CodeMirror = createReactClass({
 			<div className={editorClassName}>
 				<textarea
 					ref={ref => this.textareaNode = ref}
-					name={this.props.path}
+					name={this.props.name || this.props.path}
 					defaultValue={this.props.value}
 					autoComplete="off"
 					autoFocus={this.props.autoFocus}
