@@ -1,6 +1,7 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 var Codemirror = require('../../src/Codemirror');
+const createReactClass = require('create-react-class');
 
 require('codemirror/mode/javascript/javascript');
 require('codemirror/mode/xml/xml');
@@ -11,7 +12,7 @@ var defaults = {
 	javascript: 'var component = {\n\tname: "react-codemirror",\n\tauthor: "Jed Watson",\n\trepo: "https://github.com/JedWatson/react-codemirror"\n};'
 };
 
-var App = React.createClass({
+var App = createReactClass({
 	getInitialState () {
 		return {
 			code: defaults.markdown,
