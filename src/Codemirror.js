@@ -2,7 +2,6 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 const PropTypes = require('prop-types');
 const className = require('classnames');
-const debounce = require('lodash.debounce');
 const isEqual = require('lodash.isequal');
 const createReactClass = require('create-react-class');
 
@@ -41,7 +40,6 @@ const CodeMirror = createReactClass({
 		};
 	},
 	componentWillMount () {
-		this.componentWillReceiveProps = debounce(this.componentWillReceiveProps, 0);
 		if (this.props.path) {
 			console.error('Warning: react-codemirror: the `path` prop has been changed to `name`');
 		}
