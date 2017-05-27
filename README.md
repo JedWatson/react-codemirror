@@ -96,6 +96,7 @@ You can interact with the CodeMirror instance using a `ref` and the `getCodeMirr
 * `onCursorActivity` `Function (codemirror)` called when the cursor is moved
 * `onFocusChange` `Function (focused)` called when the editor is focused or loses focus
 * `onScroll` `Function (scrollInfo)` called when the editor is scrolled
+* `onKeyup` `Function ()` called on handling of keyup event
 * `preserveScrollPosition` `Boolean=false` preserve previous scroll position after updating value
 * `value` `String` the editor value
 

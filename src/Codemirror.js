@@ -22,6 +22,7 @@ const CodeMirror = createReactClass({
 		onCursorActivity: PropTypes.func,
 		onFocusChange: PropTypes.func,
 		onScroll: PropTypes.func,
+		onKeyup: PropTypes.func,
 		options: PropTypes.object,
 		path: PropTypes.string,
 		value: PropTypes.string,
@@ -54,6 +55,7 @@ const CodeMirror = createReactClass({
 		this.codeMirror.on('focus', this.focusChanged.bind(this, true));
 		this.codeMirror.on('blur', this.focusChanged.bind(this, false));
 		this.codeMirror.on('scroll', this.scrollChanged);
+		this.codeMirror.on('keyup', this.keyup.bind(this, true));
 		this.codeMirror.setValue(this.props.defaultValue || this.props.value || '');
 	},
 	componentWillUnmount () {
@@ -105,6 +107,9 @@ const CodeMirror = createReactClass({
 	},
 	scrollChanged (cm) {
 		this.props.onScroll && this.props.onScroll(cm.getScrollInfo());
+	},
+	keyup () {
+		this.props.onKeyup && this.props.onKeyup();
 	},
 	codemirrorValueChanged (doc, change) {
 		if (this.props.onChange && change.origin !== 'setValue') {
