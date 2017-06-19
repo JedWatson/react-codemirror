@@ -20,10 +20,11 @@ var App = createReactClass({
 			mode: 'markdown',
 		};
 	},
-	updateCode (newCode) {
+	updateCode (newCode, changeObj) {
 		this.setState({
 			code: newCode
 		});
+		console.log(changeObj);
 	},
 	changeMode (e) {
 		var mode = e.target.value;

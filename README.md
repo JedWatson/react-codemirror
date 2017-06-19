@@ -46,7 +46,8 @@ var App = React.createClass({
 		this.setState({
 			code: newCode,
 		});
-		// get changed valued from changeObj
+		// get changed value from changeObj
+		console.log(changeObj);
 	},
 	render: function() {
 		var options = {
