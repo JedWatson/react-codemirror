@@ -42,10 +42,12 @@ var App = React.createClass({
 			code: "// Code",
 		};
 	},
-	updateCode: function(newCode) {
+	updateCode: function(newCode, changeObj) {
 		this.setState({
 			code: newCode,
 		});
+		// get changed value from changeObj
+		console.log(changeObj);
 	},
 	render: function() {
 		var options = {
@@ -92,7 +94,7 @@ You can interact with the CodeMirror instance using a `ref` and the `getCodeMirr
 * `defaultValue` `String` provides a default (not change tracked) value to the editor
 * `name` `String` sets the name of the editor input field
 * `options` `Object` options passed to the CodeMirror instance
-* `onChange` `Function (newValue)` called when a change is made
+* `onChange` `Function (newValue, changeObj)` called when a change is made (`changeObj` is the object returned from [CodeMirror Change Event](https://codemirror.net/doc/manual.html#events))
 * `onCursorActivity` `Function (codemirror)` called when the cursor is moved
 * `onFocusChange` `Function (focused)` called when the editor is focused or loses focus
 * `onScroll` `Function (scrollInfo)` called when the editor is scrolled
