@@ -1,6 +1,6 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
-var Codemirror = require('../../src/Codemirror');
+var Codemirror = require('../../src/react-codemirror');
 const createReactClass = require('create-react-class');
 
 require('codemirror/mode/javascript/javascript');
