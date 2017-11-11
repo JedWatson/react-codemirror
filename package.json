@@ -29,8 +29,8 @@
     "react-dom": "^15.5.3"
   },
   "peerDependencies": {
-    "react": ">=15.5 <16",
-    "react-dom": ">=15.5 <16"
+    "react": ">=15.5 || ^16",
+    "react-dom": ">=15.5 || ^16"
   },
   "browserify-shim": {
     "react": "global:React"
