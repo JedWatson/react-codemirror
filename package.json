@@ -24,13 +24,13 @@
   "devDependencies": {
     "gulp": "^3.9.1",
     "happiness": "^7.1.2",
-    "react": "^15.5.3",
+    "react": "^16.1.1",
     "react-component-gulp-tasks": "^0.7.7",
-    "react-dom": "^15.5.3"
+    "react-dom": "^16.1.1"
   },
   "peerDependencies": {
-    "react": ">=15.5 <16",
-    "react-dom": ">=15.5 <16"
+    "react": ">=15.5",
+    "react-dom": ">=15.5"
   },
   "browserify-shim": {
     "react": "global:React"
