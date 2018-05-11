@@ -24,7 +24,11 @@ The easiest way to use codemirror is to install it from NPM and include it in yo
 You can also use the standalone build by including `dist/react-codemirror.js` in your page. If you use this, make sure you have already included React, and it is available as a global variable.
 
 ```
+//with npm
 npm install react-codemirror --save
+
+//with yarn 
+yarn add react-codemirror
 ```
 
 
