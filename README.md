@@ -10,7 +10,7 @@ Live demo: [JedWatson.github.io/react-codemirror](http://JedWatson.github.io/rea
 To build the examples locally, run:
 
 ```
-git clone http://JedWatson.github.io/react-codemirror
+git clone ...
 npm install
 npm start
 ```
